@@ -145,9 +145,9 @@ if (process.env.EMAIL_SERVER_HOST || process.env.RESEND_API_KEY) {
         await transport.sendMail({
           to: identifier,
           from: MAIL_FROM,
-          subject: 'Sign in to Freelancezero',
-          text: `Sign in to Freelancezero:\n${url}\n\nIf you didn't request this, you can ignore it.`,
-          html: `<p>Sign in to Freelancezero:</p><p><a href="${url}">Sign in</a></p><p style="color:#777;font-size:13px">Or paste this link:<br/>${url}</p>`,
+          subject: 'Sign in to 自由工作平台',
+          text: `Sign in to 自由工作平台:\n${url}\n\nIf you didn't request this, you can ignore it.`,
+          html: `<p>Sign in to 自由工作平台:</p><p><a href="${url}">Sign in</a></p><p style="color:#777;font-size:13px">Or paste this link:<br/>${url}</p>`,
         });
       },
     }),

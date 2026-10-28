@@ -6,89 +6,267 @@ import {
   Sparkles,
   Wallet,
   Zap,
-  Users2,
-  Star,
+  FileSignature,
+  FileText,
   Check,
-  X,
   Search,
-  FileCheck2,
   BadgeCheck,
+  Layers,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { LogoMark } from '@/components/logo';
-import { Testimonials } from '@/components/marketing/testimonials';
-import {
-  DashboardMockup,
-  JobFeedMockup,
-  ProfileMockup,
-  ProposalMockup,
-} from '@/components/marketing/product-mockups';
-import { pageMetadata, faqJsonLd, jsonLdScript } from '@/lib/seo';
+import { Card, CardContent } from '@/components/ui/card';
+import { pageMetadata } from '@/lib/seo';
 
 export const metadata: Metadata = pageMetadata({
-  title: 'Freelancezero — The Zero-Fee Upwork Alternative',
+  title: 'OPC — 面向中国自由职业者的零抽佣平台',
   description:
-    'Looking for an Upwork alternative with no fees? Freelancezero lets freelancers keep 100% of their earnings — no commission, no connects. Clients hire faster and pay directly. Free forever.',
+    '中文需求、里程碑合同、电子签署与支付宝/微信结算。平台不抽佣，服务方拿到全额，委托方按验收付款。',
   path: '/',
 });
 
-/**
- * Marketing homepage — benefit-first, trust-forward, commercially framed.
- * Statically rendered for instant load and strong Lighthouse/SEO.
- */
+const FEATURES = [
+  {
+    icon: FileSignature,
+    title: '中文合同 + 电子签署',
+    body: '录用后自动生成中文服务合同，双方以实名在线签署，记录姓名、时间与 IP。',
+  },
+  {
+    icon: Layers,
+    title: '里程碑托管与验收',
+    body: '按阶段托管、交付、验收、放款。每一步都有记录，避免“做完了不给钱”。',
+  },
+  {
+    icon: Wallet,
+    title: '支付宝 / 微信结算',
+    body: '绑定支付宝、微信支付或银行卡，款项直达服务方，平台不经手、不抽佣。',
+  },
+  {
+    icon: FileText,
+    title: '发票与对账',
+    body: '保存默认抬头与税号，按已结算金额申请普票或专票，合同内可追溯。',
+  },
+  {
+    icon: BadgeCheck,
+    title: '实名认证',
+    body: '签署与收款前需完成实名认证，降低虚假身份与恶意纠纷。',
+  },
+  {
+    icon: ShieldCheck,
+    title: '证据链完整',
+    body: '需求、投标、合同、交付与结算都在平台留痕，发生争议时有据可查。',
+  },
+];
+
+const STEPS = [
+  {
+    icon: Search,
+    title: '发布或找到需求',
+    body: '委托方用中文描述项目与预算；服务方浏览需求并投标，附报价与周期。',
+  },
+  {
+    icon: FileSignature,
+    title: '录用并签署合同',
+    body: '委托方选择投标录用，系统生成含里程碑的中文合同，双方实名签署后生效。',
+  },
+  {
+    icon: Layers,
+    title: '按里程碑交付结算',
+    body: '托管 → 交付 → 验收 → 放款。全部里程碑结算后合同自动完成。',
+  },
+];
+
 export default function HomePage() {
   return (
     <>
-      <Hero />
-      <StatsBand />
-      <FeeComparison />
-      <VsUpwork />
-      <Benefits />
-      <FeatureShowcase />
-      <HowItWorks />
-      <TestimonialSection />
-      <FeaturedTalent />
-      <Pricing />
-      <Faq />
-      <FinalCta />
-    </>
-  );
-}
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-navy-950 text-white">
+        <div className="pointer-events-none absolute inset-0 bg-grid-navy [background-size:44px_44px] [mask-image:radial-gradient(70%_60%_at_50%_0%,black,transparent)]" />
+        <div className="pointer-events-none absolute inset-0 bg-hero-glow" />
 
-/* -------------------------------------------------------------------------- */
-/* Hero                                                                        */
-/* -------------------------------------------------------------------------- */
+        <div className="container relative py-20 md:py-28">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="mx-auto inline-flex animate-fade-up items-center gap-2 rounded-full border border-navy-700 bg-navy-850/70 px-4 py-1.5 text-base text-navy-300 backdrop-blur">
+              <Sparkles className="size-4 text-brand-400" />
+              为中国市场打造的自由工作平台
+            </div>
 
-function Hero() {
-  return (
-    <section className="relative overflow-hidden bg-navy-950 text-white">
-      {/* Ambient grid + glow */}
-      <div className="pointer-events-none absolute inset-0 bg-grid-navy [background-size:44px_44px] [mask-image:radial-gradient(70%_60%_at_50%_0%,black,transparent)]" />
-      <div className="pointer-events-none absolute inset-0 bg-hero-glow" />
+            <h1 className="mt-6 animate-fade-up font-display text-5xl font-bold heading-tight sm:text-6xl md:text-7xl [animation-delay:60ms]">
+              接单、签约、收款
+              <br />
+              一个平台走完。
+            </h1>
 
-      <div className="container relative py-20 md:py-28">
-        <div className="mx-auto max-w-3xl text-center">
-          <div className="mx-auto inline-flex animate-fade-up items-center gap-2 rounded-full border border-navy-700 bg-navy-850/70 px-4 py-1.5 text-sm text-navy-300 backdrop-blur">
-            <Sparkles className="size-4 text-brand-400" />
-            The fair freelance marketplace
+            <p className="mx-auto mt-6 max-w-2xl animate-fade-up text-lg leading-relaxed text-navy-300 [animation-delay:120ms] sm:text-xl">
+              中文需求、里程碑合同、实名电子签署、支付宝/微信结算。
+              <span className="font-semibold text-white">平台不抽佣</span>
+              ，服务方拿到全额，委托方按验收付款。
+            </p>
+
+            <div className="mt-8 flex animate-fade-up flex-col items-center justify-center gap-3 [animation-delay:180ms] sm:flex-row">
+              <Button asChild size="lg" className="h-12 px-7 text-base shadow-glow">
+                <Link href="/register?role=freelancer">
+                  开始接单 <ArrowRight />
+                </Link>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="h-12 border-navy-600 bg-transparent px-7 text-base text-white hover:bg-navy-800 hover:text-white"
+              >
+                <Link href="/register?role=client">发布需求</Link>
+              </Button>
+            </div>
+
+            <p className="mt-5 animate-fade-up text-base text-navy-400 [animation-delay:220ms]">
+              免费注册 · 无需绑卡 · 两分钟完成资料
+            </p>
           </div>
 
-          <h1 className="mt-6 animate-fade-up font-display text-5xl font-bold heading-tight sm:text-6xl md:text-7xl [animation-delay:60ms]">
-            Keep <span className="text-gradient-brand">100%</span> of
-            <br className="hidden sm:block" /> what you earn.
-          </h1>
+          <div className="mx-auto mt-14 grid max-w-4xl gap-4 sm:grid-cols-3">
+            {[
+              { value: '100%', label: '服务方收入归自己' },
+              { value: '0', label: '平台抽佣' },
+              { value: 'CNY', label: '人民币结算与发票' },
+            ].map((s) => (
+              <div
+                key={s.label}
+                className="rounded-xl border border-navy-700/70 bg-navy-900/60 p-5 text-center backdrop-blur"
+              >
+                <p className="font-display text-3xl font-bold text-white">{s.value}</p>
+                <p className="mt-1 text-sm text-navy-300">{s.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-          <p className="mx-auto mt-6 max-w-2xl animate-fade-up text-lg leading-relaxed text-navy-300 [animation-delay:120ms] sm:text-xl">
-            The freelance marketplace that finally works for you. Keep{' '}
-            <span className="font-semibold text-white">100%</span> of your earnings, get paid faster,
-            and find better matches — while Upwork quietly takes up to 10% of every invoice.
+      {/* Features */}
+      <section id="how" className="bg-background py-24">
+        <div className="container">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-sm font-semibold uppercase tracking-widest text-primary">核心能力</p>
+            <h2 className="mt-3 font-display text-3xl font-bold heading-tight sm:text-4xl">
+              不只是发需求，而是把交易闭环做完
+            </h2>
+            <p className="mt-4 text-muted-foreground">
+              从找到人，到签合同、按阶段交付、验收付款、开票，全部在一个平台内完成。
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {FEATURES.map((f) => (
+              <Card key={f.title} className="h-full">
+                <CardContent className="p-6">
+                  <f.icon className="size-6 text-primary" />
+                  <h3 className="mt-4 font-semibold">{f.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.body}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Steps */}
+      <section className="border-y bg-muted/30 py-24">
+        <div className="container">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-sm font-semibold uppercase tracking-widest text-primary">怎么运作</p>
+            <h2 className="mt-3 font-display text-3xl font-bold heading-tight sm:text-4xl">
+              三步完成一次合作
+            </h2>
+          </div>
+
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {STEPS.map((s, i) => (
+              <div key={s.title} className="relative rounded-xl border bg-background p-6">
+                <span className="absolute right-5 top-5 font-display text-4xl font-bold text-muted-foreground/20">
+                  {i + 1}
+                </span>
+                <s.icon className="size-6 text-primary" />
+                <h3 className="mt-4 font-semibold">{s.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Rules */}
+      <section id="pricing" className="py-24">
+        <div className="container mx-auto max-w-2xl text-center">
+          <p className="text-sm font-semibold uppercase tracking-widest text-primary">平台规则</p>
+          <h2 className="mt-3 font-display text-3xl font-bold heading-tight sm:text-4xl">
+            0 抽佣，钱只经过你和对方
+          </h2>
+          <p className="mt-4 text-muted-foreground">
+            平台不参与分成。支付通道收取的手续费由通道方决定，平台不加价。
           </p>
+          <div className="mt-8 grid gap-3 text-left sm:grid-cols-2">
+            {[
+              '服务方报价即到手价，平台不扣点',
+              '委托方按里程碑验收后付款，不预付全款',
+              '合同、签署与结算记录可随时查看',
+              '发票抬头与税号一次保存，重复使用',
+            ].map((item) => (
+              <div key={item} className="flex items-start gap-2 rounded-lg border p-3 text-sm">
+                <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-          <div className="mt-8 flex animate-fade-up flex-col items-center justify-center gap-3 [animation-delay:180ms] sm:flex-row">
+      {/* FAQ */}
+      <section id="trust" className="border-t bg-muted/30 py-24">
+        <div className="container mx-auto max-w-2xl">
+          <h2 className="text-center font-display text-3xl font-bold heading-tight sm:text-4xl">
+            常见问题
+          </h2>
+          <div className="mt-8 grid gap-4">
+            {[
+              {
+                q: '平台真的不收费吗？',
+                a: '平台不抽佣、不收会员费。支付通道自身的手续费由通道收取，与平台无关。',
+              },
+              {
+                q: '资金安全怎么保证？',
+                a: '资金按里程碑托管，验收通过后才放款。平台记录每一笔状态，双方都能查看。正式接入支付通道前，使用手动记账模式。',
+              },
+              {
+                q: '合同有法律效力吗？',
+                a: '双方以实名在平台签署并记录姓名、时间与 IP，形成电子证据。需要 CA 级签署时可切换 e签宝/法大大。',
+              },
+              {
+                q: '可以开发票吗？',
+                a: '按已结算金额申请增值税普通发票或专用发票，抬头、税号与邮箱会保存复用。',
+              },
+            ].map((item) => (
+              <div key={item.q} className="rounded-lg border bg-background p-5">
+                <h3 className="font-medium">{item.q}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="relative overflow-hidden bg-navy-950 py-24 text-white">
+        <div className="pointer-events-none absolute inset-0 bg-hero-glow" />
+        <div className="container relative mx-auto max-w-2xl text-center">
+          <Zap className="mx-auto size-8 text-brand-400" />
+          <h2 className="mt-5 font-display text-3xl font-bold heading-tight sm:text-4xl">
+            把下一单，放在一个能签合同的地方
+          </h2>
+          <p className="mt-4 text-navy-300">
+            免费注册。发布需求或创建资料，几分钟内开始第一次合作。
+          </p>
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Button asChild size="lg" className="h-12 px-7 text-base shadow-glow">
-              <Link href="/register?role=freelancer">
-                Start earning — it&apos;s free <ArrowRight />
-              </Link>
+              <Link href="/register?role=freelancer">我是服务方</Link>
             </Button>
             <Button
               asChild
@@ -96,608 +274,11 @@ function Hero() {
               variant="outline"
               className="h-12 border-navy-600 bg-transparent px-7 text-base text-white hover:bg-navy-800 hover:text-white"
             >
-              <Link href="/register?role=client">Hire top talent</Link>
+              <Link href="/register?role=client">我是委托方</Link>
             </Button>
           </div>
-
-          <p className="mt-5 animate-fade-up text-sm text-navy-400 [animation-delay:220ms]">
-            Join 12,450+ freelancers and clients · No card required · Set up in 2 minutes
-          </p>
         </div>
-
-        {/* Product mockup */}
-        <div className="relative mx-auto mt-14 max-w-4xl animate-fade-up [animation-delay:300ms]">
-          <div className="absolute -inset-x-10 -top-10 bottom-0 -z-10 bg-hero-glow" />
-          <DashboardMockup />
-        </div>
-
-        {/* Trust logos */}
-        <div className="mt-16">
-          <p className="text-center text-xs font-medium uppercase tracking-widest text-navy-400">
-            Pay and get paid through the processors you already trust
-          </p>
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-navy-400">
-            {['Stripe', 'PayPal', 'Wise', 'Payoneer', 'USDC'].map((name) => (
-              <span key={name} className="text-lg font-semibold tracking-tight opacity-70">
-                {name}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* Stats                                                                       */
-/* -------------------------------------------------------------------------- */
-
-const STATS = [
-  { value: '$12M+', label: 'Earned by freelancers' },
-  { value: '$0', label: 'Taken in platform fees' },
-  { value: '4.9/5', label: 'Average project rating' },
-  { value: '12,450', label: 'Active members' },
-];
-
-function StatsBand() {
-  return (
-    <section id="trust" className="border-b bg-background">
-      <div className="container grid grid-cols-2 gap-8 py-14 md:grid-cols-4">
-        {STATS.map((s) => (
-          <div key={s.label} className="text-center">
-            <p className="font-display text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-              {s.value}
-            </p>
-            <p className="mt-2 text-sm text-muted-foreground">{s.label}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* Fee comparison                                                              */
-/* -------------------------------------------------------------------------- */
-
-function FeeComparison() {
-  return (
-    <section className="bg-background py-24">
-      <div className="container">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-display text-3xl font-bold heading-tight sm:text-4xl">
-            On a $10,000 project, where does your money go?
-          </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
-            Traditional marketplaces quietly skim every invoice. We don&apos;t take a cent — the math
-            is simple.
-          </p>
-        </div>
-
-        <div className="mx-auto mt-14 grid max-w-4xl gap-6 md:grid-cols-2">
-          {/* Them */}
-          <div className="rounded-2xl border bg-card p-8">
-            <p className="text-sm font-semibold text-muted-foreground">Typical marketplace</p>
-            <p className="mt-2 font-display text-4xl font-bold text-foreground">
-              $8,685 <span className="text-lg font-medium text-muted-foreground">to you</span>
-            </p>
-            <div className="mt-6 flex h-4 overflow-hidden rounded-full bg-muted">
-              <div className="h-full w-[86.85%] bg-slate-400" />
-              <div className="h-full w-[10%] bg-destructive" />
-              <div className="h-full w-[2.5%] bg-orange-500" />
-              <div className="h-full w-[0.4%] bg-amber-400" />
-              <div className="h-full w-[0.25%] bg-violet-500" />
-            </div>
-            <ul className="mt-4 space-y-1.5 text-sm">
-              <li className="flex items-center gap-2 text-destructive">
-                <span className="size-2 shrink-0 rounded-sm bg-destructive" />
-                − $1,000 platform fee (10% of every invoice)
-              </li>
-              <li className="flex items-center gap-2 text-orange-600">
-                <span className="size-2 shrink-0 rounded-sm bg-orange-500" />
-                − $250 application credits — ~100 paid bids per win, spent whether or
-                not you get the job
-              </li>
-              <li className="flex items-center gap-2 text-amber-600">
-                <span className="size-2 shrink-0 rounded-sm bg-amber-400" />
-                − $40 membership and signup fees
-              </li>
-              <li className="flex items-center gap-2 text-violet-600">
-                <span className="size-2 shrink-0 rounded-sm bg-violet-500" />
-                − $25 withdrawal fee just to move your own money
-              </li>
-            </ul>
-            <p className="mt-4 text-sm font-medium text-muted-foreground">
-              That&apos;s over 13% gone — and the credits are gone even when you don&apos;t win.
-            </p>
-          </div>
-
-          {/* Us */}
-          <div className="relative rounded-2xl border-2 border-primary bg-card p-8 shadow-card-hover">
-            <span className="absolute -top-3 left-8 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground">
-              Freelancezero
-            </span>
-            <p className="text-sm font-semibold text-primary">Freelancezero</p>
-            <p className="mt-2 font-display text-4xl font-bold text-foreground">
-              $10,000 <span className="text-lg font-medium text-muted-foreground">to you</span>
-            </p>
-            <div className="mt-6 h-4 overflow-hidden rounded-full bg-muted">
-              <div className="h-full w-full bg-primary" />
-            </div>
-            <p className="mt-3 text-sm font-medium text-primary">
-              $0 in fees — you keep every dollar
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* Benefits                                                                    */
-/* -------------------------------------------------------------------------- */
-
-const BENEFITS = [
-  {
-    icon: Wallet,
-    title: 'Keep every dollar',
-    body: 'No commissions, no paying to apply, no withdrawal fees. Your rate is your take-home — full stop.',
-  },
-  {
-    icon: Sparkles,
-    title: 'Smarter matching',
-    body: 'Quality-scored proposals and relevance-ranked talent mean less noise and faster, better hires.',
-  },
-  {
-    icon: Zap,
-    title: 'A delightful workflow',
-    body: 'Contracts, milestones, chat, and time tracking in one fast, modern workspace you’ll enjoy using.',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Direct, secure payments',
-    body: 'Pay and get paid through Stripe, PayPal, Wise, or crypto — you choose. We never hold your money.',
-  },
-  {
-    icon: BadgeCheck,
-    title: 'Real trust signals',
-    body: 'Verified clients, transparent reviews, and endorsements so both sides know who they’re working with.',
-  },
-  {
-    icon: Users2,
-    title: 'Yours to own',
-    body: 'Export your data anytime, bring your own clients, and never get locked in. Your reputation travels with you.',
-  },
-];
-
-function Benefits() {
-  return (
-    <section className="border-y bg-muted/30 py-24">
-      <div className="container">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-primary">Why switch</p>
-          <h2 className="mt-3 font-display text-3xl font-bold heading-tight sm:text-4xl">
-            Everything you need to win work and get paid
-          </h2>
-        </div>
-        <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {BENEFITS.map((b) => (
-            <div
-              key={b.title}
-              className="group rounded-2xl border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-card-hover"
-            >
-              <div className="grid size-11 place-items-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                <b.icon className="size-5" />
-              </div>
-              <h3 className="mt-4 text-lg font-semibold">{b.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{b.body}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* Feature showcase (alternating mockups)                                      */
-/* -------------------------------------------------------------------------- */
-
-const FEATURES = [
-  {
-    eyebrow: 'Discovery',
-    title: 'Find work that actually fits',
-    body: 'Every job you see is scored for how well it matches your skills and rate. No more scrolling past a hundred irrelevant posts to find the one worth your time.',
-    points: ['Relevance-ranked job feed', 'Saved searches & instant alerts', 'One-click, high-quality proposals'],
-    mockup: <JobFeedMockup />,
-  },
-  {
-    eyebrow: 'Reputation',
-    title: 'A profile that wins the pitch',
-    body: 'Showcase a rich portfolio, endorsed skills, and verified reviews. Clients see exactly why you’re the right hire — before you say a word.',
-    points: ['Portfolio, case studies & GitHub', 'Endorsements & verified reviews', 'Live “open to work” status'],
-    mockup: <ProfileMockup />,
-    reverse: true,
-  },
-  {
-    eyebrow: 'Payments',
-    title: 'Milestones, delivered and paid — with zero cut',
-    body: 'Fund milestones, approve deliverables, and release payment directly to your freelancer through your own processor. Transparent, safe, and 100% fee-free.',
-    points: ['Milestone-based contracts', 'Deliverable approval workflow', 'Direct payouts, $0 platform fee'],
-    mockup: <ProposalMockup />,
-  },
-];
-
-function FeatureShowcase() {
-  return (
-    <section id="how" className="bg-background py-24">
-      <div className="container space-y-24">
-        {FEATURES.map((f) => (
-          <div
-            key={f.title}
-            className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16"
-          >
-            <div className={f.reverse ? 'lg:order-2' : ''}>
-              <p className="text-sm font-semibold uppercase tracking-widest text-primary">
-                {f.eyebrow}
-              </p>
-              <h2 className="mt-3 font-display text-3xl font-bold heading-tight sm:text-4xl">
-                {f.title}
-              </h2>
-              <p className="mt-4 text-lg leading-relaxed text-muted-foreground">{f.body}</p>
-              <ul className="mt-6 space-y-3">
-                {f.points.map((p) => (
-                  <li key={p} className="flex items-center gap-3 text-sm font-medium">
-                    <span className="grid size-5 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">
-                      <Check className="size-3" />
-                    </span>
-                    {p}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className={f.reverse ? 'lg:order-1' : ''}>{f.mockup}</div>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* How it works                                                                */
-/* -------------------------------------------------------------------------- */
-
-const STEPS = [
-  { icon: Search, title: 'Post or find work', body: 'Clients post a job in minutes; freelancers get matched to roles that fit.' },
-  { icon: FileCheck2, title: 'Agree on milestones', body: 'Set scope, timeline, and payment terms in a clear, shared contract.' },
-  { icon: Wallet, title: 'Deliver & get paid in full', body: 'Approve work and release payment directly — with zero fees taken out.' },
-];
-
-function HowItWorks() {
-  return (
-    <section className="border-y bg-muted/30 py-24">
-      <div className="container">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-display text-3xl font-bold heading-tight sm:text-4xl">
-            From “hello” to “paid” in three steps
-          </h2>
-        </div>
-        <div className="mt-14 grid gap-8 md:grid-cols-3">
-          {STEPS.map((s, i) => (
-            <div key={s.title} className="relative text-center">
-              <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
-                <s.icon className="size-6" />
-              </div>
-              <div className="mt-2 text-sm font-semibold text-primary">Step {i + 1}</div>
-              <h3 className="mt-1 text-lg font-semibold">{s.title}</h3>
-              <p className="mx-auto mt-2 max-w-xs text-sm text-muted-foreground">{s.body}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* Testimonials                                                                */
-/* -------------------------------------------------------------------------- */
-
-function TestimonialSection() {
-  return (
-    <section className="bg-navy-950 py-24 text-white">
-      <div className="container">
-        <div className="mx-auto mb-14 max-w-2xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-brand-400">
-            Loved by both sides
-          </p>
-          <h2 className="mt-3 font-display text-3xl font-bold heading-tight sm:text-4xl">
-            People are moving their work — and their income — here
-          </h2>
-        </div>
-        <Testimonials />
-      </div>
-    </section>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* Featured talent                                                             */
-/* -------------------------------------------------------------------------- */
-
-const TALENT = [
-  { name: 'Amara Nwosu', role: 'Brand & Web Designer', rate: '$75/hr', rating: '5.0', initials: 'AN', skills: ['Figma', 'Webflow'] },
-  { name: 'Leo Martins', role: 'Full-Stack Developer', rate: '$90/hr', rating: '4.9', initials: 'LM', skills: ['React', 'Go'] },
-  { name: 'Priya Nair', role: 'Growth Marketer', rate: '$65/hr', rating: '4.9', initials: 'PN', skills: ['SEO', 'Ads'] },
-  { name: 'Hugo Weber', role: 'Motion & Video', rate: '$80/hr', rating: '5.0', initials: 'HW', skills: ['After Effects'] },
-];
-
-function FeaturedTalent() {
-  return (
-    <section className="bg-background py-24">
-      <div className="container">
-        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-widest text-primary">
-              Featured talent
-            </p>
-            <h2 className="mt-3 font-display text-3xl font-bold heading-tight sm:text-4xl">
-              Top-rated professionals, ready to start
-            </h2>
-          </div>
-          <Button asChild variant="outline">
-            <Link href="/register?role=client">
-              Hire talent <ArrowRight />
-            </Link>
-          </Button>
-        </div>
-
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {TALENT.map((t) => (
-            <div key={t.name} className="rounded-2xl border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-card-hover">
-              <div className="flex items-center gap-3">
-                <div className="grid size-12 place-items-center rounded-full bg-gradient-to-br from-brand-400 to-brand-600 font-bold text-white">
-                  {t.initials}
-                </div>
-                <div>
-                  <p className="font-semibold leading-tight">{t.name}</p>
-                  <p className="text-xs text-muted-foreground">{t.role}</p>
-                </div>
-              </div>
-              <div className="mt-4 flex items-center justify-between text-sm">
-                <span className="font-semibold text-primary">{t.rate}</span>
-                <span className="inline-flex items-center gap-1 text-muted-foreground">
-                  <Star className="size-4 fill-amber-400 text-amber-400" /> {t.rating}
-                </span>
-              </div>
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {t.skills.map((s) => (
-                  <span key={s} className="rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground">
-                    {s}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* Pricing                                                                     */
-/* -------------------------------------------------------------------------- */
-
-function Pricing() {
-  return (
-    <section id="pricing" className="border-y bg-muted/30 py-24">
-      <div className="container">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-primary">Pricing</p>
-          <h2 className="mt-3 font-display text-3xl font-bold heading-tight sm:text-4xl">
-            The whole platform is free. Really.
-          </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
-            We don&apos;t make money by taking yours. No fees for freelancers, no fees for clients — now
-            or ever.
-          </p>
-        </div>
-
-        <div className="mx-auto mt-12 max-w-md rounded-3xl border-2 border-primary bg-card p-8 text-center shadow-card-hover">
-          <p className="font-display text-6xl font-bold">$0</p>
-          <p className="mt-1 text-muted-foreground">per month · per project · per anything</p>
-          <ul className="mt-8 space-y-3 text-left">
-            {[
-              'Unlimited jobs, proposals & contracts',
-              'Milestones, chat & time tracking',
-              'Direct payments via your own processor',
-              'Verified reviews & reputation',
-              'Full data export, no lock-in',
-            ].map((f) => (
-              <li key={f} className="flex items-center gap-3 text-sm font-medium">
-                <span className="grid size-5 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground">
-                  <Check className="size-3" />
-                </span>
-                {f}
-              </li>
-            ))}
-          </ul>
-          <Button asChild size="lg" className="mt-8 w-full">
-            <Link href="/register">Create your free account</Link>
-          </Button>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* vs Upwork comparison table                                                  */
-/* -------------------------------------------------------------------------- */
-
-const COMPARISON: { feature: string; us: string; them: string; usWin: boolean }[] = [
-  { feature: 'Platform fee on your earnings', us: '0%', them: '10%', usWin: true },
-  { feature: 'Pay to submit proposals (“connects”)', us: 'Never', them: 'Yes', usWin: true },
-  { feature: 'Client payment processing markup', us: 'None', them: 'Up to 5%', usWin: true },
-  { feature: 'Choose your own payout processor', us: 'Yes', them: 'No', usWin: true },
-  { feature: 'Instant payouts', us: 'Supported', them: 'Limited', usWin: true },
-  { feature: 'AI-assisted matching & proposals', us: 'Built-in', them: 'Partial', usWin: true },
-  { feature: 'Own & export all your data', us: 'Always', them: 'No', usWin: true },
-  { feature: 'Transparent, community-led disputes', us: 'Yes', them: 'Opaque', usWin: true },
-];
-
-function VsUpwork() {
-  return (
-    <section className="bg-background py-24">
-      <div className="container">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-primary">
-            Freelancezero vs Upwork
-          </p>
-          <h2 className="mt-3 font-display text-3xl font-bold heading-tight sm:text-4xl">
-            A side-by-side you can’t unsee
-          </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
-            Same work. Same clients. Radically different economics and control.
-          </p>
-        </div>
-
-        <div className="mx-auto mt-12 max-w-3xl overflow-hidden rounded-2xl border shadow-card-hover">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b bg-muted/40">
-                <th className="p-4 font-medium text-muted-foreground">What matters to you</th>
-                <th className="p-4 text-center font-semibold text-primary">Freelancezero</th>
-                <th className="p-4 text-center font-medium text-muted-foreground">Upwork</th>
-              </tr>
-            </thead>
-            <tbody>
-              {COMPARISON.map((row, i) => (
-                <tr key={row.feature} className={i % 2 ? 'bg-muted/20' : ''}>
-                  <td className="p-4 font-medium">{row.feature}</td>
-                  <td className="p-4 text-center">
-                    <span className="inline-flex items-center gap-1.5 font-semibold text-primary">
-                      <Check className="size-4" /> {row.us}
-                    </span>
-                  </td>
-                  <td className="p-4 text-center text-muted-foreground">
-                    <span className="inline-flex items-center gap-1.5">
-                      <X className="size-4 text-destructive/70" /> {row.them}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p className="mx-auto mt-4 max-w-3xl text-center text-xs text-muted-foreground">
-          Comparison based on publicly listed Upwork terms as of 2026. “Upwork” is a trademark of its
-          owner; Freelancezero is not affiliated with or endorsed by Upwork.
-        </p>
-      </div>
-    </section>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* FAQ (with FAQPage schema for rich results)                                  */
-/* -------------------------------------------------------------------------- */
-
-const FAQ_ITEMS = [
-  {
-    q: 'Is Freelancezero really free — what’s the catch?',
-    a: 'Yes. Freelancezero charges freelancers and clients 0% — no commissions, no connects, no withdrawal fees. There is no catch: the platform is a coordinator, not a middleman that skims payments. We sustain the project through optional premium tools and services that never gate the core marketplace.',
-  },
-  {
-    q: 'How is Freelancezero different from Upwork?',
-    a: 'The biggest difference is fees: Upwork takes up to 10% of your earnings, plus paid “connects” to apply and payment-processing markups. Freelancezero takes nothing. You also choose your own payout processor (Stripe, PayPal, Wise, or crypto), own and export your data anytime, and get faster, AI-assisted matching.',
-  },
-  {
-    q: 'How do freelancers get paid if the platform takes no fee?',
-    a: 'Payments flow directly from client to freelancer through a processor you choose. Freelancezero coordinates milestones and releases but never holds your money, so there’s no platform cut and often faster access to funds.',
-  },
-  {
-    q: 'Can I import my Upwork profile and reviews?',
-    a: 'Yes. Our import tool helps you rebuild your profile — bio, skills, portfolio, and work history — in minutes so switching doesn’t mean starting from zero.',
-  },
-  {
-    q: 'Is it safe? How are disputes handled?',
-    a: 'Clients can be payment- and identity-verified, reviews are transparent and double-blind to prevent retaliation, and disputes use a fast, transparent, community-led resolution process with optional arbitration.',
-  },
-  {
-    q: 'Do you support agencies and teams?',
-    a: 'Yes. Agencies can add team members with roles, manage a shared pipeline, and bid or deliver as a team — with the same zero-fee model.',
-  },
-];
-
-function Faq() {
-  return (
-    <section className="border-y bg-muted/30 py-24">
-      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript(faqJsonLd(FAQ_ITEMS))} />
-      <div className="container">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-primary">
-            Questions, answered
-          </p>
-          <h2 className="mt-3 font-display text-3xl font-bold heading-tight sm:text-4xl">
-            Everything you’re wondering about a zero-fee marketplace
-          </h2>
-        </div>
-
-        <div className="mx-auto mt-12 max-w-3xl divide-y rounded-2xl border bg-card">
-          {FAQ_ITEMS.map((item) => (
-            <details key={item.q} className="group p-6 [&_summary]:list-none">
-              <summary className="flex cursor-pointer items-center justify-between gap-4 font-semibold">
-                {item.q}
-                <span className="grid size-6 shrink-0 place-items-center rounded-full border text-muted-foreground transition-transform group-open:rotate-45">
-                  +
-                </span>
-              </summary>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.a}</p>
-            </details>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* Final CTA                                                                    */
-/* -------------------------------------------------------------------------- */
-
-function FinalCta() {
-  return (
-    <section className="relative overflow-hidden bg-navy-950 py-24 text-white">
-      <div className="pointer-events-none absolute inset-0 bg-hero-glow" />
-      <div className="container relative text-center">
-        <LogoMark className="mx-auto size-14 rounded-2xl shadow-glow" />
-        <h2 className="mx-auto mt-6 max-w-2xl font-display text-4xl font-bold heading-tight sm:text-5xl">
-          Stop giving away a cut of your work.
-        </h2>
-        <p className="mx-auto mt-4 max-w-xl text-lg text-navy-300">
-          Join thousands of freelancers and clients who&apos;ve switched to the fair way to work.
-        </p>
-        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Button asChild size="lg" className="h-12 px-7 text-base shadow-glow">
-            <Link href="/register?role=freelancer">
-              Start earning free <ArrowRight />
-            </Link>
-          </Button>
-          <Button
-            asChild
-            size="lg"
-            variant="outline"
-            className="h-12 border-navy-600 bg-transparent px-7 text-base text-white hover:bg-navy-800 hover:text-white"
-          >
-            <Link href="/register?role=client">Post a job</Link>
-          </Button>
-        </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

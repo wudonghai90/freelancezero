@@ -12,26 +12,25 @@ import { pageMetadata } from '@/lib/seo';
 
 const FREELANCER_ROLES = ['FREELANCER', 'AGENCY_OWNER', 'AGENCY_MEMBER'];
 
+const EXPERIENCE_LABEL: Record<string, string> = {
+  ENTRY: '入门',
+  INTERMEDIATE: '中级',
+  EXPERT: '专家',
+};
+
 export const metadata = pageMetadata({
-  title: 'Find Freelance Work — Zero Fees, Keep 100%',
-  description:
-    'Browse freelance jobs and keep 100% of what you earn. No commissions, no connects to apply. Find remote freelance work across development, design, writing, and marketing.',
+  title: '需求大厅 — 中文自由工作机会',
+  description: '浏览中文自由工作需求，覆盖开发、设计、写作与营销。平台不抽佣，里程碑结算。',
   path: '/jobs',
-  keywords: ['freelance jobs', 'remote freelance work', 'find freelance work no fees'],
+  keywords: ['自由职业', '远程工作', '接单', '外包需求'],
 });
-// Always reflect the latest open jobs.
 export const dynamic = 'force-dynamic';
 
 /** Public job feed. Finding work is for freelancers — clients hire instead. */
 export default async function JobsPage() {
-  // The job feed is a members-only surface for freelancers: guests sign in
-  // first (which also keeps the full listing out of scrapers' reach), and
-  // signed-in clients are sent to their own hub.
   const session = await auth();
   if (!session?.user) redirect('/login?next=/jobs');
   if (!FREELANCER_ROLES.includes(session.user.role)) redirect('/dashboard');
-  // The feed is a post-onboarding surface: applying requires admin approval
-  // (see the proposals API), so users still in the wizard get sent back.
   const onboarding = await getOnboarding(session.user.id, session.user.role);
   if (!onboarding.complete) redirect('/onboarding');
 
@@ -58,12 +57,12 @@ export default async function JobsPage() {
     <div className="container py-12">
       <div className="mb-8 flex items-center gap-3">
         <Briefcase className="text-primary" />
-        <h1 className="text-3xl font-bold">Find work</h1>
-        <Badge variant="secondary">{jobs.length} open</Badge>
+        <h1 className="text-3xl font-bold">需求大厅</h1>
+        <Badge variant="secondary">{jobs.length} 个在招</Badge>
       </div>
 
       {jobs.length === 0 ? (
-        <p className="text-muted-foreground">No open jobs yet. Check back soon.</p>
+        <p className="text-muted-foreground">暂无开放需求，稍后再来看看。</p>
       ) : (
         <div className="grid gap-4">
           {jobs.map((job) => (
@@ -80,12 +79,14 @@ export default async function JobsPage() {
                 <CardContent>
                   <p className="line-clamp-2 text-sm text-muted-foreground">{job.description}</p>
                   <div className="mt-3 flex flex-wrap items-center gap-2">
-                    <Badge variant="outline">{job.experience.toLowerCase()}</Badge>
+                    <Badge variant="outline">
+                      {EXPERIENCE_LABEL[job.experience] ?? job.experience}
+                    </Badge>
                     {job.skills.map((s) => (
                       <Badge key={s.skill.id}>{s.skill.name}</Badge>
                     ))}
                     <span className="ml-auto text-xs text-muted-foreground">
-                      {job._count.proposals} proposal{job._count.proposals === 1 ? '' : 's'}
+                      {job._count.proposals} 份投标
                     </span>
                   </div>
                 </CardContent>
@@ -105,9 +106,9 @@ function formatBudget(job: {
   currency: string;
 }): string {
   const { budgetMin, budgetMax, currency } = job;
-  if (budgetMin == null && budgetMax == null) return 'Budget TBD';
-  if (job.budgetType === 'FIXED') return `${formatMoney(budgetMax ?? budgetMin!, currency)} fixed`;
+  if (budgetMin == null && budgetMax == null) return '预算待定';
+  if (job.budgetType === 'FIXED') return `${formatMoney(budgetMax ?? budgetMin!, currency)}（固定价）`;
   const lo = budgetMin != null ? formatMoney(budgetMin, currency) : '';
   const hi = budgetMax != null ? formatMoney(budgetMax, currency) : '';
-  return `${[lo, hi].filter(Boolean).join(' – ')}/hr`;
+  return `${[lo, hi].filter(Boolean).join(' – ')}/小时`;
 }

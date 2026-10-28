@@ -21,7 +21,6 @@ type Props = {
   isFreelancer: boolean;
   email: string;
   initialHeadline: string;
-  initialHourlyRate: number | null;
   initialLocation: string;
   payout: {
     provider: 'STRIPE_CONNECT' | 'PAYPAL' | 'WISE' | 'MANUAL' | 'CRYPTO_USDC' | null;
@@ -47,7 +46,7 @@ export function OnboardingWizard(props: Props) {
     <Card className="w-full max-w-2xl">
       <CardHeader>
         <CardTitle className="text-2xl">
-          {complete ? "You're all set" : 'Finish setting up your account'}
+          {complete ? '全部完成' : '完成账号设置'}
         </CardTitle>
         <Stepper steps={steps} currentIndex={currentIndex} />
       </CardHeader>
@@ -56,28 +55,27 @@ export function OnboardingWizard(props: Props) {
           <div className="flex flex-col items-center gap-3 py-6 text-center">
             <PartyPopper className="size-10 text-primary" />
             <p className="text-muted-foreground">
-              Your account is fully set up and approved. Time to put it to work.
+              账号已设置完成并通过审核，开始使用吧。
             </p>
             <Button asChild className="mt-2">
               <Link href="/dashboard">
-                Go to dashboard <ArrowRight />
+                进入工作台 <ArrowRight />
               </Link>
             </Button>
           </div>
         ) : onlyApprovalLeft ? (
           <div className="flex flex-col items-center gap-3 py-6 text-center">
             <Clock className="size-10 text-amber-600" />
-            <p className="font-medium">You&apos;re in the review queue</p>
+            <p className="font-medium">账号正在审核中</p>
             <p className="max-w-sm text-sm text-muted-foreground">
-              That&apos;s everything on your side. An admin reviews your account next — approval
-              usually takes under a day, and we&apos;ll email you the moment it lands.
+              你这边已完成，接下来由管理员审核。通常一天内完成，通过后会邮件通知你。
             </p>
             <div className="mt-2 flex gap-2">
               <Button variant="outline" onClick={() => router.refresh()}>
-                Check status
+                查看状态
               </Button>
               <Button asChild variant="ghost">
-                <Link href="/">Browse the site meanwhile</Link>
+                <Link href="/">先逛逛平台</Link>
               </Button>
             </div>
           </div>
@@ -88,7 +86,6 @@ export function OnboardingWizard(props: Props) {
         ) : current?.id === 'profile' ? (
           <ProfileStep
             headline={props.initialHeadline}
-            hourlyRate={props.initialHourlyRate}
             location={props.initialLocation}
           />
         ) : current?.id === 'payout' ? (
@@ -105,16 +102,16 @@ function EmailStep({ email }: { email: string }) {
   const router = useRouter();
   return (
     <div className="flex flex-col items-center gap-3 py-4 text-center">
-      <p className="font-medium">Confirm your email</p>
+      <p className="font-medium">验证你的邮箱</p>
       <p className="max-w-sm text-sm text-muted-foreground">
-        We sent a confirmation link to <span className="font-medium">{email}</span>. Click it, then
-        continue here.
+        我们已向 <span className="font-medium">{email}</span>{' '}
+        发送验证链接。点击邮件中的链接后，回到这里继续。
       </p>
       <p className="text-sm text-muted-foreground">
-        Nothing in your inbox? <ResendVerificationButton />
+        没收到邮件？<ResendVerificationButton />
       </p>
       <Button onClick={() => router.refresh()} className="mt-2">
-        I&apos;ve confirmed — continue <ArrowRight />
+        我已完成验证，继续 <ArrowRight />
       </Button>
     </div>
   );
@@ -130,7 +127,7 @@ function PhotoStep() {
 
   async function upload() {
     if (!file) {
-      setError('Choose a photo first');
+      setError('请先选择图片');
       return;
     }
     setBusy(true);
@@ -141,7 +138,7 @@ function PhotoStep() {
     setBusy(false);
     if (!res.ok) {
       const body = await res.json().catch(() => null);
-      setError(body?.error?.message ?? 'Upload failed — try another image');
+      setError(body?.error?.message ?? '上传失败，请换一张图片试试');
       return;
     }
     // Re-sync the JWT session so the new photo shows in the navbar immediately.
@@ -152,15 +149,15 @@ function PhotoStep() {
   return (
     <div className="grid gap-4 py-2">
       <div>
-        <p className="font-medium">Add a profile photo</p>
+        <p className="font-medium">上传头像</p>
         <p className="text-sm text-muted-foreground">
-          Clients and freelancers see this. PNG or JPG, up to 2 MB.
+          客户和服务方都能看到。支持 PNG / JPG / WebP，最大 2 MB。
         </p>
       </div>
       <div className="flex items-center gap-4">
         {preview ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={preview} alt="Preview" className="size-16 rounded-full object-cover" />
+          <img src={preview} alt="头像预览" className="size-16 rounded-full object-cover" />
         ) : null}
         <Input
           type="file"
@@ -176,7 +173,7 @@ function PhotoStep() {
       </div>
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
       <Button onClick={upload} disabled={busy} className="w-fit">
-        {busy ? 'Uploading…' : 'Upload and continue'} <ArrowRight />
+        {busy ? '上传中…' : '上传并继续'} <ArrowRight />
       </Button>
     </div>
   );
@@ -184,17 +181,14 @@ function PhotoStep() {
 
 function ProfileStep({
   headline,
-  hourlyRate,
   location,
 }: {
   headline: string;
-  hourlyRate: number | null;
   location: string;
 }) {
   const router = useRouter();
   const [headlineInput, setHeadlineInput] = useState(headline);
   const [locationInput, setLocationInput] = useState(location);
-  const [rateInput, setRateInput] = useState(hourlyRate != null ? String(hourlyRate / 100) : '');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -208,7 +202,6 @@ function ProfileStep({
         headline: headlineInput.trim(),
         location: locationInput.trim(),
         bio: '',
-        hourlyRate: rateInput.trim() ? Math.round(Number(rateInput)) : undefined,
       }),
     });
     setBusy(false);
@@ -216,7 +209,7 @@ function ProfileStep({
       const body = await res.json().catch(() => null);
       const flat = body?.error?.details?.fieldErrors as Record<string, string[]> | undefined;
       const first = flat ? Object.values(flat)[0]?.[0] : undefined;
-      setError(first ?? body?.error?.message ?? 'Could not save. Try again.');
+      setError(first ?? body?.error?.message ?? '保存失败，请重试。');
       return;
     }
     router.refresh();
@@ -225,45 +218,34 @@ function ProfileStep({
   return (
     <div className="grid gap-4 py-2">
       <div>
-        <p className="font-medium">Your basics</p>
+        <p className="font-medium">基本信息</p>
         <p className="text-sm text-muted-foreground">
-          A headline that sells you, and where you work from — clients filter on both.
+          用一句话介绍你的专长和所在地，客户会按这两项筛选。
         </p>
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="headline">Headline</Label>
+        <Label htmlFor="headline">个人标题</Label>
         <Input
           id="headline"
           value={headlineInput}
           onChange={(e) => setHeadlineInput(e.target.value)}
-          placeholder="Senior Full-Stack Engineer"
+          placeholder="资深全栈工程师"
           maxLength={120}
         />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="location">Location</Label>
+        <Label htmlFor="location">所在地</Label>
         <Input
           id="location"
           value={locationInput}
           onChange={(e) => setLocationInput(e.target.value)}
-          placeholder="Amsterdam, Netherlands"
+          placeholder="上海，中国"
           maxLength={120}
         />
       </div>
-      <div className="grid gap-2">
-        <Label htmlFor="rate">Hourly rate (USD, optional)</Label>
-        <Input
-          id="rate"
-          inputMode="numeric"
-          value={rateInput}
-          onChange={(e) => setRateInput(e.target.value)}
-          placeholder="85"
-          className="w-32"
-        />
-      </div>
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
-      <Button onClick={save} disabled={busy || headlineInput.trim().length < 10 || locationInput.trim().length < 2} className="w-fit">
-        {busy ? 'Saving…' : 'Save and continue'} <ArrowRight />
+      <Button onClick={save} disabled={busy || headlineInput.trim().length < 2 || locationInput.trim().length < 2} className="w-fit">
+        {busy ? '保存中…' : '保存并继续'} <ArrowRight />
       </Button>
     </div>
   );
@@ -274,9 +256,9 @@ function PayoutStep({ payout }: { payout: Props['payout'] }) {
   return (
     <div className="grid gap-4 py-2">
       <div>
-        <p className="font-medium">Add a payment method</p>
+        <p className="font-medium">添加付款方式</p>
         <p className="text-sm text-muted-foreground">
-          How you&apos;ll pay talent — directly, with zero platform fees.
+          直接向服务人才付款，平台零抽佣。
         </p>
       </div>
       <PayoutMethods
@@ -286,7 +268,7 @@ function PayoutStep({ payout }: { payout: Props['payout'] }) {
         isFreelancer={false}
       />
       <Button onClick={() => router.refresh()} className="w-fit">
-        Continue <ArrowRight />
+        继续 <ArrowRight />
       </Button>
     </div>
   );

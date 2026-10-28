@@ -59,7 +59,7 @@ export function CompanyCombobox({
         }}
         onFocus={() => setOpen(true)}
         autoComplete="organization"
-        placeholder="Start typing your company name"
+        placeholder="输入公司名称"
       />
       {open && (options.length > 0 || showAdd) ? (
         <ul className="absolute z-20 mt-1 max-h-56 w-full overflow-auto rounded-md border bg-card p-1 shadow-md">

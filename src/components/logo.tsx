@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 
 /**
- * The Freelancezero brand mark: a bold "0" (zero fees, zero commission) cut by
+ * The 自由工作平台 brand mark: a bold "0" (zero fees, zero commission) cut by
  * a rising slash — earnings break through and go up. Royal-blue → teal
  * gradient. The slash's gap is a true mask knockout, so the mark works on any
  * background.
@@ -35,13 +35,13 @@ export function LogoMark({ className }: { className?: string }) {
   );
 }
 
-/** Full lockup: mark + "Freelancezero" wordmark with brand-blue "zero". */
+/** Full lockup: mark + Chinese wordmark with brand-blue "工作平台". */
 export function Logo({ className }: { className?: string }) {
   return (
-    <span className={cn('flex items-center gap-2 font-display text-lg font-bold tracking-tight', className)}>
+    <span className={cn('flex items-center gap-2 font-display text-3xl font-bold tracking-tight', className)}>
       <LogoMark className="size-8" />
       <span>
-        Freelance<span className="text-[#2E5BF0]">zero</span>
+        自由<span className="text-[#2E5BF0]">工作平台</span>
       </span>
     </span>
   );

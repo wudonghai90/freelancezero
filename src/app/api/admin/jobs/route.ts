@@ -11,7 +11,7 @@ const schema = z.object({
   /** Company name for the posting's owner shell. */
   companyName: z.string().trim().max(120).optional(),
   /** Recruiter contact address — what makes a draft publishable. */
-  contactEmail: z.string().trim().email('Enter a valid email').or(z.literal('')).optional(),
+  contactEmail: z.string().trim().email('请输入有效的邮箱地址').or(z.literal('')).optional(),
 });
 
 /**
@@ -30,7 +30,7 @@ export function PATCH(req: Request) {
       where: { id: body.jobId },
       select: { id: true, clientId: true },
     });
-    if (!job) return fail('Posting not found', 404);
+    if (!job) return fail('需求不存在', 404);
 
     // An admin-entered address is a deliberate, verified act.
     if (body.contactEmail) {
@@ -80,7 +80,7 @@ export function PATCH(req: Request) {
       });
       const reachable = contact?.contactable || owner?.status !== 'UNCLAIMED';
       if (!reachable) {
-        return fail('Add a contact email before publishing — applicants must reach someone.', 422);
+        return fail('发布前请填写联系邮箱，方便投标人联系', 422);
       }
     }
 

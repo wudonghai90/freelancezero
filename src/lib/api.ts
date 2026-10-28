@@ -19,10 +19,10 @@ export function fail(message: string, status = 400, details?: unknown) {
 }
 
 export function unauthorized() {
-  return fail('Authentication required', 401);
+  return fail('请先登录', 401);
 }
 
-export function forbidden(message = 'You do not have permission to do that') {
+export function forbidden(message = '没有权限执行此操作') {
   return fail(message, 403);
 }
 
@@ -33,9 +33,9 @@ export function forbidden(message = 'You do not have permission to do that') {
 export function handle(fn: () => Promise<Response>): Promise<Response> {
   return fn().catch((err) => {
     if (err instanceof ZodError) {
-      return fail('Validation failed', 422, err.flatten());
+      return fail('表单校验未通过', 422, err.flatten());
     }
     console.error('[api] unhandled error', err);
-    return fail('Something went wrong', 500);
+    return fail('服务器出错了，请稍后再试', 500);
   });
 }

@@ -49,7 +49,7 @@ export function DashboardMockup() {
         <aside className="hidden w-44 shrink-0 flex-col gap-1 border-r border-black/5 bg-slate-50/80 p-3 sm:flex">
           <div className="mb-3 flex items-center gap-2 px-2 py-1 text-sm font-bold">
             <span className="grid size-6 place-items-center rounded-md bg-primary text-white">Fz</span>
-            Freelancezero
+            自由工作平台
           </div>
           {SIDEBAR.map((item) => (
             <div

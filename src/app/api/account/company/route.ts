@@ -1,11 +1,13 @@
 import { z } from 'zod';
+import { after } from 'next/server';
 import { db } from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { ok, forbidden, unauthorized, handle } from '@/lib/api';
+import { runAutoReview } from '@/lib/ai/moderation';
 
 const schema = z.object({
   companyName: z.string().trim().max(120).optional(),
-  companyUrl: z.string().trim().url('Enter a valid URL').max(300).or(z.literal('')).optional(),
+  companyUrl: z.string().trim().url('请输入有效的网址').max(300).or(z.literal('')).optional(),
   about: z.string().trim().max(5000).optional(),
   location: z.string().trim().max(120).optional(),
 });
@@ -34,6 +36,10 @@ export function POST(req: Request) {
       update: data,
       create: { userId: session.user.id, ...data },
     });
+
+    after(() =>
+      runAutoReview(session.user.id).catch((err) => console.error('[ai-moderation]', err)),
+    );
 
     return ok(data);
   });

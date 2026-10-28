@@ -12,7 +12,7 @@ const API_URL = 'https://remoteok.com/api';
 // Descriptive UA with a contact URL — we identify ourselves rather than spoof a
 // browser. RemoteOK asks scrapers to link back; we do that on the job page.
 const USER_AGENT =
-  'FreelancezeroBot/1.0 (+https://freelancezero.com/about/crawler)';
+  '自由工作平台Bot/1.0 (+https://freelancezero.com/about/crawler)';
 
 interface RemoteOkPosting {
   id?: string;

@@ -14,9 +14,9 @@ export async function sendVerificationEmail(user: { email: string; name: string 
   const link = `${process.env.NEXT_PUBLIC_APP_URL}/verify?token=${token}&email=${encodeURIComponent(user.email)}`;
   await sendMail(
     user.email,
-    'Confirm your email — Freelancezero',
-    `Hi ${user.name ?? 'there'},\n\n` +
-      `Confirm your email address to finish setting up your account:\n[Confirm email](${link})\n\n` +
-      `This link expires in 24 hours. If you didn't create an account, you can ignore this email.`,
+    '请验证你的邮箱 — 自由工作平台',
+    `你好，${user.name ?? '用户'}：\n\n` +
+      `请验证邮箱地址以完成账号设置：\n[验证邮箱](${link})\n\n` +
+      `链接 24 小时内有效。如果这不是你本人的操作，请忽略此邮件。`,
   );
 }

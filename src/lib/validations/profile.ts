@@ -41,14 +41,14 @@ function hostedUrl(hosts: string[], label: string) {
     .string()
     .trim()
     .max(300)
-    .refine((v) => v === '' || normalizeUrl(v) !== null, { message: 'Enter a valid URL' })
+    .refine((v) => v === '' || normalizeUrl(v) !== null, { message: '请输入有效的网址' })
     .refine(
       (v) => {
         if (v === '') return true;
         const host = hostOf(v);
         return !!host && hosts.some((h) => host === h || host.endsWith(`.${h}`));
       },
-      { message: `Enter a ${label} URL (e.g. ${hosts[0]}/yourname)` },
+      { message: `${label} 链接格式不正确（例如 ${hosts[0]}/yourname）` },
     )
     .transform((v) => (v === '' ? '' : (normalizeUrl(v) ?? '')));
 }
@@ -58,7 +58,7 @@ const anyUrl = z
   .string()
   .trim()
   .max(300)
-  .refine((v) => v === '' || normalizeUrl(v) !== null, { message: 'Enter a valid URL' })
+  .refine((v) => v === '' || normalizeUrl(v) !== null, { message: '请输入有效的网址' })
   .transform((v) => (v === '' ? '' : (normalizeUrl(v) ?? '')));
 
 export const BIO_MIN = 80;
@@ -68,17 +68,17 @@ export const profileSchema = z.object({
   headline: z
     .string()
     .trim()
-    .min(10, 'Give yourself a real headline (at least 10 characters)')
-    .max(120),
+    .min(2, '请填写个人标题（至少 2 个字符）')
+    .max(120, '个人标题最多 120 个字符'),
   bio: z
     .string()
     .trim()
-    .max(BIO_MAX, `Keep your bio under ${BIO_MAX} characters`)
+    .max(BIO_MAX, `个人简介最多 ${BIO_MAX} 个字符`)
     .refine((v) => v === '' || v.length >= BIO_MIN, {
-      message: `Write at least ${BIO_MIN} characters so clients get a real sense of you`,
+      message: `个人简介至少 ${BIO_MIN} 个字符，让客户更了解你`,
     }),
   // Required: clients filter on location and ask about timezone overlap first.
-  location: z.string().trim().min(2, 'Location is required').max(120),
+  location: z.string().trim().min(2, '请填写所在地').max(120),
   timezone: z.string().trim().max(60).optional(),
   yearsExperience: z.number().int().min(0).max(60).optional(),
   hourlyRate: z.number().int().min(0).max(10000).optional(),

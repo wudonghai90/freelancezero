@@ -76,8 +76,8 @@ export function POST(req: Request) {
       where: { id: session.user.id },
       select: { emailVerified: true, approvedAt: true },
     });
-    if (!me?.emailVerified) return forbidden('Confirm your email before posting a job — check your inbox.');
-    if (!me.approvedAt) return forbidden('Your account is pending admin review. You can post once approved.');
+    if (!me?.emailVerified) return forbidden('请先验证邮箱后再发布需求（请查看收件箱）');
+    if (!me.approvedAt) return forbidden('账号正在等待管理员审核，通过后即可发布需求');
 
     const body = createJobSchema.parse(await req.json());
 

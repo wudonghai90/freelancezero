@@ -44,7 +44,7 @@ function RegisterForm() {
 
     if (!res.ok) {
       const body = await res.json().catch(() => null);
-      setServerError(body?.error?.message ?? 'Could not create your account');
+      setServerError(body?.error?.message ?? '注册失败，请稍后重试');
       return;
     }
 
@@ -62,7 +62,7 @@ function RegisterForm() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
-        <CardTitle className="text-2xl">Create your free account</CardTitle>
+        <CardTitle className="text-2xl">创建账号</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="mb-4 grid grid-cols-2 gap-2">
@@ -76,7 +76,7 @@ function RegisterForm() {
                 role === r ? 'border-primary bg-primary/10 text-primary' : 'hover:bg-accent',
               )}
             >
-              {r === 'CLIENT' ? "I'm hiring" : "I'm working"}
+              {r === 'CLIENT' ? "我是委托方" : "我是服务方"}
             </button>
           ))}
         </div>
@@ -84,21 +84,12 @@ function RegisterForm() {
         {/* noValidate: inline field errors below replace browser tooltips. */}
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4" noValidate>
           {role === 'CLIENT' ? (
-            <Field id="company" label="Company (optional)">
+            <Field id="company" label="公司名称（可选）">
               <CompanyCombobox id="company" value={company} onChange={setCompany} />
             </Field>
           ) : null}
           <div className="grid grid-cols-2 gap-3">
-            <Field id="firstName" label="First name" error={errors.firstName?.message}>
-              <Input
-                id="firstName"
-                autoComplete="given-name"
-                aria-invalid={!!errors.firstName}
-                className={cn(errors.firstName && 'border-destructive')}
-                {...register('firstName')}
-              />
-            </Field>
-            <Field id="lastName" label="Last name" error={errors.lastName?.message}>
+            <Field id="lastName" label="姓" error={errors.lastName?.message}>
               <Input
                 id="lastName"
                 autoComplete="family-name"
@@ -107,8 +98,17 @@ function RegisterForm() {
                 {...register('lastName')}
               />
             </Field>
+            <Field id="firstName" label="名" error={errors.firstName?.message}>
+              <Input
+                id="firstName"
+                autoComplete="given-name"
+                aria-invalid={!!errors.firstName}
+                className={cn(errors.firstName && 'border-destructive')}
+                {...register('firstName')}
+              />
+            </Field>
           </div>
-          <Field id="email" label="Email" error={errors.email?.message}>
+          <Field id="email" label="邮箱" error={errors.email?.message}>
             <Input
               id="email"
               type="email"
@@ -120,9 +120,9 @@ function RegisterForm() {
           </Field>
           <Field
             id="password"
-            label="Password"
+            label="密码"
             error={errors.password?.message}
-            hint="8+ chars with upper, lower, and a number."
+            hint="至少 8 位，包含大小写字母和数字。"
           >
             <Input
               id="password"
@@ -133,7 +133,7 @@ function RegisterForm() {
               {...register('password')}
             />
           </Field>
-          <Field id="confirmPassword" label="Confirm password" error={errors.confirmPassword?.message}>
+          <Field id="confirmPassword" label="确认密码" error={errors.confirmPassword?.message}>
             <Input
               id="confirmPassword"
               type="password"
@@ -144,17 +144,17 @@ function RegisterForm() {
             />
           </Field>
           <p className="text-xs text-muted-foreground">
-            Next you&apos;ll add a profile photo and confirm your email — it takes a minute.
+            下一步上传头像并确认邮箱，大约一分钟。
           </p>
           {serverError ? <p className="text-sm text-destructive">{serverError}</p> : null}
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Creating…' : 'Create account'}
+            {isSubmitting ? '创建中…' : '创建账号'}
           </Button>
         </form>
         <p className="mt-4 text-center text-sm text-muted-foreground">
-          Already have an account?{' '}
+          已有账号？{' '}
           <Link href="/login" className="text-primary hover:underline">
-            Log in
+            登录
           </Link>
         </p>
       </CardContent>

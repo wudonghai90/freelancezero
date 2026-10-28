@@ -31,9 +31,9 @@ export function POST(req: Request, { params }: { params: Promise<{ id: string }>
         participants: { select: { userId: true } },
       },
     });
-    if (!conversation) return fail('Conversation not found', 404);
+    if (!conversation) return fail('会话不存在', 404);
     if (!conversation.participants.some((p) => p.userId === me)) {
-      return fail('Conversation not found', 404);
+      return fail('会话不存在', 404);
     }
 
     await db.message.create({

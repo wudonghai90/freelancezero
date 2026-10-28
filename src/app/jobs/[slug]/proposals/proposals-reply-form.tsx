@@ -33,7 +33,7 @@ export function ProposalReplyForm({ proposalId }: { proposalId: string }) {
       <textarea
         value={body}
         onChange={(e) => setBody(e.target.value)}
-        placeholder="Reply to this applicant…"
+        placeholder="回复该投标人…"
         rows={3}
         className="w-full rounded-md border bg-background p-2 text-sm"
       />

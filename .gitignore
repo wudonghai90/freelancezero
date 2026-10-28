@@ -27,6 +27,7 @@ next-env.d.ts
 .DS_Store
 *.pem
 npm-debug.log*
+dev.log
 yarn-debug.log*
 yarn-error.log*
 .idea

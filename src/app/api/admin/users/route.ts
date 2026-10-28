@@ -9,9 +9,11 @@ const schema = z.object({
   name: z.string().trim().max(120).optional(),
   companyName: z.string().trim().max(120).optional(),
   headline: z.string().trim().max(120).optional(),
-  contactEmail: z.string().trim().email('Enter a valid email').or(z.literal('')).optional(),
+  contactEmail: z.string().trim().email('请输入有效的邮箱地址').or(z.literal('')).optional(),
   status: z.enum(['ACTIVE', 'SUSPENDED', 'BANNED', 'UNCLAIMED']).optional(),
   approved: z.boolean().optional(),
+  // 人工实名审核：通过后写入 VERIFIED，撤销则回到 UNVERIFIED。
+  identityVerified: z.boolean().optional(),
 });
 
 /** PATCH /api/admin/users — curate a user record. Admin only. */
@@ -27,7 +29,7 @@ export function PATCH(req: Request) {
       where: { id: body.userId },
       select: { id: true, role: true },
     });
-    if (!target) return fail('User not found', 404);
+    if (!target) return fail('用户不存在', 404);
 
     // Account-level fields.
     const userData = {
@@ -35,6 +37,11 @@ export function PATCH(req: Request) {
       ...(body.status !== undefined ? { status: body.status } : {}),
       ...(body.approved !== undefined
         ? { approvedAt: body.approved ? new Date() : null }
+        : {}),
+      ...(body.identityVerified !== undefined
+        ? body.identityVerified
+          ? { identityStatus: 'VERIFIED' as const, identityVerifiedAt: new Date() }
+          : { identityStatus: 'UNVERIFIED' as const, identityVerifiedAt: null }
         : {}),
     };
     if (Object.keys(userData).length) {

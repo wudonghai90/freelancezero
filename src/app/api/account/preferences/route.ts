@@ -4,7 +4,7 @@ import { auth } from '@/lib/auth';
 import { ok, fail, unauthorized, handle } from '@/lib/api';
 
 const schema = z.object({
-  name: z.string().trim().min(2, 'Name is too short').max(120).optional(),
+  name: z.string().trim().min(2, '名称至少 2 个字符').max(120, '名称最多 120 个字符').optional(),
   showFullName: z.boolean().optional(),
   indexProfile: z.boolean().optional(),
   notifyProposals: z.boolean().optional(),

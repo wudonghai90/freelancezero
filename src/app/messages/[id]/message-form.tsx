@@ -40,7 +40,7 @@ export function MessageForm({ conversationId }: { conversationId: string }) {
         value={body}
         onChange={(e) => setBody(e.target.value)}
         rows={4}
-        placeholder="Write a message…"
+        placeholder="输入消息…"
         className="w-full rounded-md border bg-background p-3 text-sm"
       />
       {error ? <p className="text-sm text-destructive">{error}</p> : null}

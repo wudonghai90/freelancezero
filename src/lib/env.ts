@@ -42,13 +42,32 @@ const schema = z.object({
   // Shared secret guarding the /api/cron/* endpoints (Bearer token).
   CRON_SECRET: z.string().optional(),
 
-  // Identity verification provider (KYC). 'none' disables the feature.
-  IDENTITY_DRIVER: z.enum(['none', 'stripe']).default('none'),
+  // Identity verification provider (KYC). 'manual' = 人工审核（国内默认）。
+  IDENTITY_DRIVER: z.enum(['none', 'manual', 'stripe']).default('none'),
 
   STORAGE_DRIVER: z.enum(['local', 's3']).default('local'),
   REALTIME_DRIVER: z.enum(['socketio', 'pusher', 'none']).default('none'),
   SEARCH_DRIVER: z.enum(['postgres', 'meilisearch']).default('postgres'),
-  PAYMENTS_DRIVER: z.enum(['manual', 'stripe', 'paypal']).default('manual'),
+  PAYMENTS_DRIVER: z
+    .enum(['manual', 'alipay', 'wechat', 'stripe', 'paypal'])
+    .default('manual'),
+
+  // 电子签：manual = 站内点击签署（记录姓名/时间/IP）；esign/fadada 预留。
+  ESIGN_DRIVER: z.enum(['manual', 'esign', 'fadada']).default('manual'),
+
+  // LLM registration pre-screen (OpenAI-compatible Chat Completions).
+  // Without a key the review is skipped and the account stays in the human queue.
+  AI_MODERATION_API_KEY: z.string().optional(),
+  AI_MODERATION_BASE_URL: z.string().url().default('https://api.deepseek.com/v1'),
+  AI_MODERATION_MODEL: z.string().default('deepseek-chat'),
+
+  // 支付宝开放平台（PAYMENTS_DRIVER=alipay 时需要）
+  ALIPAY_APP_ID: z.string().optional(),
+  ALIPAY_PRIVATE_KEY: z.string().optional(),
+  ALIPAY_PUBLIC_KEY: z.string().optional(),
+  // 微信支付服务商/商户号（PAYMENTS_DRIVER=wechat 时需要）
+  WECHAT_MCH_ID: z.string().optional(),
+  WECHAT_API_KEY: z.string().optional(),
 });
 
 // On the client, only NEXT_PUBLIC_* vars exist; skip strict parsing there.

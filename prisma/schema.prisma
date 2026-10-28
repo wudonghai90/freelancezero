@@ -1,11 +1,11 @@
-// Freelancezero — Prisma schema
+// 自由工作平台 鈥?Prisma schema
 // -----------------------------------------------------------------------------
 // This is the single source of truth for the data model. It is intentionally
 // verbose and heavily commented because the schema *is* the domain model of the
 // platform. Keep migrations small and reviewable.
 //
 // Conventions:
-//   - Ids are cuid() strings (URL-safe, non-enumerable — avoids leaking counts).
+//   - Ids are cuid() strings (URL-safe, non-enumerable 鈥?avoids leaking counts).
 //   - All money is stored in integer minor units (cents) + an ISO currency code.
 //     NEVER use floats for money.
 //   - `createdAt` / `updatedAt` on every table for auditability.
@@ -34,10 +34,10 @@ enum UserRole {
 
 enum IdentityStatus {
   UNVERIFIED
-  PENDING   // session created, user still completing the checks
+  PENDING // session created, user still completing the checks
   PROCESSING // provider reviewing
   VERIFIED
-  FAILED    // provider could not verify; the user may retry
+  FAILED // provider could not verify; the user may retry
 }
 
 enum UserStatus {
@@ -49,6 +49,16 @@ enum UserStatus {
   // password and cannot sign in normally; it is "claimed" (-> ACTIVE) when the
   // recruiter follows a magic link and sets a password. See RecruiterContact.
   UNCLAIMED
+}
+
+// Outcome of the LLM pre-screen of registration data. PASSED = auto-approved,
+// FLAGGED = sent to a human, FAILED = AI unavailable (also human review).
+enum AutoReviewStatus {
+  NOT_STARTED
+  PENDING
+  PASSED
+  FLAGGED
+  FAILED
 }
 
 model User {
@@ -75,10 +85,14 @@ model User {
   // people-search result. Users opt in to showing their full name.
   showFullName Boolean @default(false)
 
+  // Verified legal name (real-name verification). Never shown on public
+  // profiles; used on contracts and invoices.
+  realName String?
+
   // --- Identity verification (KYC) ---
   // Handled by a third-party provider (document + selfie/liveness capture, via
   // QR hand-off to the phone camera). We deliberately store only the outcome and
-  // an opaque provider reference — never document images or ID numbers.
+  // an opaque provider reference 鈥?never document images or ID numbers.
   identityStatus     IdentityStatus @default(UNVERIFIED)
   identityProvider   String?
   identityRef        String?
@@ -96,19 +110,26 @@ model User {
   notifyMessages    Boolean @default(true)
   notifyProductNews Boolean @default(false)
 
-  // How this user moves money — a freelancer's payout method or a client's
+  // How this user moves money 鈥?a freelancer's payout method or a client's
   // billing method. Null = not set up yet (drives the "add a payment method"
   // warning). `payoutDetail` holds a display-only identifier (masked account,
   // PayPal email, etc.); it is never a credential.
   payoutProvider   PaymentProvider?
   payoutDetail     String?
-  // Account holder name — required for bank payouts (MANUAL/WISE), since a
+  // Account holder name 鈥?required for bank payouts (MANUAL/WISE), since a
   // transfer can't be addressed to an IBAN alone.
   payoutHolderName String?
 
   // Set once an admin manually approves the account. Null = pending review;
   // posting jobs and applying to them is gated on this (anti-spam).
   approvedAt DateTime?
+
+  // LLM pre-screen result. Only advisory: a flagged/failed review stays in the
+  // human queue; nothing is auto-rejected. See src/lib/ai/moderation.ts.
+  autoReviewStatus AutoReviewStatus @default(NOT_STARTED)
+  autoReviewScore  Int?
+  autoReviewReason String?
+  autoReviewedAt   DateTime?
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -123,18 +144,21 @@ model User {
   clientProfile     ClientProfile?
   agencyMemberships AgencyMember[]
 
-  jobsPosted      Job[]           @relation("JobClient")
-  proposals       Proposal[]
-  sentMessages    Message[]       @relation("MessageSender")
-  conversations   Participant[]
-  reviewsAuthored Review[]        @relation("ReviewAuthor")
-  reviewsReceived Review[]        @relation("ReviewTarget")
-  notifications   Notification[]
-  savedSearches   SavedSearch[]
-  auditLogs       AuditLog[]
-  timeEntries     TimeEntry[]
-  contractsAsClient     Contract[] @relation("ContractClient")
-  contractsAsFreelancer Contract[] @relation("ContractFreelancer")
+  jobsPosted            Job[]               @relation("JobClient")
+  proposals             Proposal[]
+  sentMessages          Message[]           @relation("MessageSender")
+  conversations         Participant[]
+  reviewsAuthored       Review[]            @relation("ReviewAuthor")
+  reviewsReceived       Review[]            @relation("ReviewTarget")
+  notifications         Notification[]
+  savedSearches         SavedSearch[]
+  auditLogs             AuditLog[]
+  timeEntries           TimeEntry[]
+  contractsAsClient     Contract[]          @relation("ContractClient")
+  contractsAsFreelancer Contract[]          @relation("ContractFreelancer")
+  signatures            ContractSignature[]
+  invoices              Invoice[]
+  invoiceProfile        InvoiceProfile?
 
   // Cold-start / external-job ingestion (only populated for UNCLAIMED shells).
   recruiterContact      RecruiterContact?
@@ -201,32 +225,32 @@ model FreelancerProfile {
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  headline     String? // e.g. "Senior Full-Stack Engineer"
-  bio          String? @db.Text
-  hourlyRate   Int? // minor units
-  currency     String  @default("USD")
-  availability Availability @default(OPEN_TO_OFFERS)
-  hoursPerWeek Int?
-  // Required during onboarding — clients filter on it and timezone overlap is
+  headline        String? // e.g. "Senior Full-Stack Engineer"
+  bio             String?      @db.Text
+  hourlyRate      Int? // minor units
+  currency        String       @default("CNY")
+  availability    Availability @default(OPEN_TO_OFFERS)
+  hoursPerWeek    Int?
+  // Required during onboarding 鈥?clients filter on it and timezone overlap is
   // the first thing they ask about.
-  location     String?
-  timezone     String?
+  location        String?
+  timezone        String?
   yearsExperience Int?
 
   // Professional links. Each is validated against its expected host at the API
   // layer, so a GitHub field cannot hold a random URL.
-  websiteUrl   String?
-  githubUrl    String?
-  linkedinUrl  String?
-  dribbbleUrl  String?
-  behanceUrl   String?
+  websiteUrl       String?
+  githubUrl        String?
+  linkedinUrl      String?
+  dribbbleUrl      String?
+  behanceUrl       String?
   stackoverflowUrl String?
-  xUrl         String?
+  xUrl             String?
 
   // Denormalized aggregates for fast sorting/filtering; recomputed on writes.
-  ratingAvg          Float @default(0)
-  ratingCount        Int   @default(0)
-  completenessScore  Int   @default(0) // 0-100, drives "complete your profile" nudges
+  ratingAvg         Float @default(0)
+  ratingCount       Int   @default(0)
+  completenessScore Int   @default(0) // 0-100, drives "complete your profile" nudges
 
   skills         FreelancerSkill[]
   portfolioItems PortfolioItem[]
@@ -266,7 +290,7 @@ model ClientProfile {
   @@map("client_profiles")
 }
 
-// Public company directory — powers the client sign-up combobox. Names are
+// Public company directory 鈥?powers the client sign-up combobox. Names are
 // unique; companies a client types that aren't listed are added automatically
 // at registration.
 model Company {
@@ -296,7 +320,7 @@ model FreelancerSkill {
   id                  String @id @default(cuid())
   freelancerProfileId String
   skillId             String
-  // Endorsement count — social proof from clients/peers.
+  // Endorsement count 鈥?social proof from clients/peers.
   endorsements        Int    @default(0)
 
   freelancerProfile FreelancerProfile @relation(fields: [freelancerProfileId], references: [id], onDelete: Cascade)
@@ -437,24 +461,24 @@ enum ExperienceLevel {
 }
 
 model Job {
-  id          String   @id @default(cuid())
-  clientId    String
-  client      User     @relation("JobClient", fields: [clientId], references: [id], onDelete: Cascade)
+  id       String @id @default(cuid())
+  clientId String
+  client   User   @relation("JobClient", fields: [clientId], references: [id], onDelete: Cascade)
 
   title       String
-  slug        String   @unique
-  description String   @db.Text
+  slug        String @unique
+  description String @db.Text
 
   budgetType    BudgetType
   // For FIXED: budgetMin == budgetMax. For HOURLY: rate range. Minor units.
   budgetMin     Int?
   budgetMax     Int?
-  currency      String          @default("USD")
+  currency      String          @default("CNY")
   experience    ExperienceLevel @default(INTERMEDIATE)
   estimatedDays Int?
 
-  status      JobStatus @default(OPEN)
-  visibility  String    @default("public") // public | invite_only
+  status     JobStatus @default(OPEN)
+  visibility String    @default("public") // public | invite_only
 
   skills    JobSkill[]
   proposals Proposal[]
@@ -485,15 +509,15 @@ model JobSkill {
 }
 
 model SavedSearch {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  name      String
-  // Serialized filter state (skills, rate range, keywords…).
-  query     Json
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name          String
+  // Serialized filter state (skills, rate range, keywords鈥?.
+  query         Json
   // Alert cadence for email/in-app notifications.
-  alertsEnabled Boolean @default(true)
-  createdAt DateTime @default(now())
+  alertsEnabled Boolean  @default(true)
+  createdAt     DateTime @default(now())
 
   @@index([userId])
   @@map("saved_searches")
@@ -512,21 +536,21 @@ enum ProposalStatus {
 }
 
 model Proposal {
-  id            String         @id @default(cuid())
-  jobId         String
-  freelancerId  String
-  job           Job            @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  freelancer    User           @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
+  id           String @id @default(cuid())
+  jobId        String
+  freelancerId String
+  job          Job    @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  freelancer   User   @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
 
   coverLetter   String         @db.Text
-  bidAmount     Int // minor units — total (fixed) or hourly rate
+  bidAmount     Int // minor units 鈥?total (fixed) or hourly rate
   bidType       BudgetType
   estimatedDays Int?
   status        ProposalStatus @default(SUBMITTED)
 
   // Anti-spam: a lightweight quality score (0-100) computed from profile
   // completeness, relevance, and account trust. Drives default sort/visibility.
-  qualityScore  Int @default(0)
+  qualityScore Int @default(0)
 
   milestones ProposalMilestone[]
 
@@ -540,12 +564,12 @@ model Proposal {
 }
 
 model ProposalMilestone {
-  id          String @id @default(cuid())
-  proposalId  String
-  title       String
-  amount      Int // minor units
-  dueInDays   Int?
-  order       Int    @default(0)
+  id         String @id @default(cuid())
+  proposalId String
+  title      String
+  amount     Int // minor units
+  dueInDays  Int?
+  order      Int    @default(0)
 
   proposal Proposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
 
@@ -565,8 +589,8 @@ enum ContractStatus {
 }
 
 model Contract {
-  id           String         @id @default(cuid())
-  jobId        String         @unique
+  id           String @id @default(cuid())
+  jobId        String @unique
   clientId     String
   freelancerId String
 
@@ -576,12 +600,22 @@ model Contract {
 
   title      String
   budgetType BudgetType
-  currency   String         @default("USD")
+  currency   String         @default("CNY")
   status     ContractStatus @default(ACTIVE)
+
+  // Full contract text shown to both parties before signing.
+  content String? @db.Text
+
+  // Signature state. Both timestamps are set before any milestone can be
+  // funded, so work never starts on an unsigned contract.
+  clientSignedAt     DateTime?
+  freelancerSignedAt DateTime?
 
   milestones   Milestone[]
   timeEntries  TimeEntry[]
   deliverables Deliverable[]
+  signatures   ContractSignature[]
+  invoices     Invoice[]
   dispute      Dispute?
   review       Review[]
 
@@ -596,30 +630,30 @@ model Contract {
 }
 
 enum MilestoneStatus {
-  PENDING       // not yet funded
-  FUNDED        // escrow funded (real or simulated)
-  SUBMITTED     // freelancer submitted work
-  APPROVED      // client approved
-  RELEASED      // funds released to freelancer
+  PENDING // not yet funded
+  FUNDED // escrow funded (real or simulated)
+  SUBMITTED // freelancer submitted work
+  APPROVED // client approved
+  RELEASED // funds released to freelancer
   DISPUTED
 }
 
 model Milestone {
-  id         String          @id @default(cuid())
+  id         String   @id @default(cuid())
   contractId String
-  contract   Contract        @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
 
-  title      String
-  amount     Int // minor units
-  status     MilestoneStatus @default(PENDING)
-  order      Int             @default(0)
-  dueAt      DateTime?
+  title  String
+  amount Int // minor units
+  status MilestoneStatus @default(PENDING)
+  order  Int             @default(0)
+  dueAt  DateTime?
 
   // Link to the payment record when funded/released.
-  payment    Payment?
+  payment Payment?
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([contractId, status])
   @@map("milestones")
@@ -632,11 +666,11 @@ model TimeEntry {
   contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  description String?
-  startedAt   DateTime
-  endedAt     DateTime?
+  description   String?
+  startedAt     DateTime
+  endedAt       DateTime?
   // Duration in seconds, computed on stop. Denormalized for reporting.
-  seconds     Int      @default(0)
+  seconds       Int       @default(0)
   // Privacy-first: screenshots are opt-in and off by default.
   screenshotUrl String?
 
@@ -653,9 +687,9 @@ enum DeliverableStatus {
 }
 
 model Deliverable {
-  id         String            @id @default(cuid())
+  id         String   @id @default(cuid())
   contractId String
-  contract   Contract          @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
 
   title      String
   notes      String?           @db.Text
@@ -672,7 +706,7 @@ model Deliverable {
 }
 
 // ============================================================================
-// PAYMENTS  (zero-fee — the platform is a coordinator, not a custodian)
+// PAYMENTS  (zero-fee 鈥?the platform is a coordinator, not a custodian)
 // ============================================================================
 
 enum PaymentProvider {
@@ -681,6 +715,9 @@ enum PaymentProvider {
   PAYPAL
   WISE
   CRYPTO_USDC
+  ALIPAY // 支付宝（中国）
+  WECHAT_PAY // 微信支付（中国）
+  BANK_TRANSFER // 对公/对私银行转账
 }
 
 enum PaymentStatus {
@@ -695,16 +732,19 @@ enum PaymentStatus {
 // `provider` adapter routes funds directly from client to freelancer. For the
 // MANUAL provider the platform only records that a payment happened (ledger).
 model Payment {
-  id          String          @id @default(cuid())
-  milestoneId String          @unique
-  milestone   Milestone       @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  id          String    @id @default(cuid())
+  milestoneId String    @unique
+  milestone   Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
 
   provider    PaymentProvider
   status      PaymentStatus   @default(PENDING)
   amount      Int // minor units
-  currency    String          @default("USD")
+  currency    String          @default("CNY")
   // Opaque reference from the payment provider (charge id, tx hash, etc.).
   providerRef String?
+  // Domestic gateways need a merchant-side order number for reconciliation.
+  outTradeNo  String?         @unique
+  paidAt      DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -717,12 +757,12 @@ model Payment {
 // ============================================================================
 
 model Conversation {
-  id        String        @id @default(cuid())
+  id        String   @id @default(cuid())
   // Optional link to a job/contract for a "project room".
   jobId     String?
   title     String?
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   participants Participant[]
   messages     Message[]
@@ -731,7 +771,7 @@ model Conversation {
 }
 
 model Participant {
-  id             String       @id @default(cuid())
+  id             String    @id @default(cuid())
   conversationId String
   userId         String
   // For unread badges.
@@ -752,11 +792,11 @@ enum MessageKind {
 }
 
 model Message {
-  id             String       @id @default(cuid())
+  id             String      @id @default(cuid())
   conversationId String
   senderId       String
-  kind           MessageKind  @default(TEXT)
-  body           String       @db.Text
+  kind           MessageKind @default(TEXT)
+  body           String      @db.Text
   // For FILE messages.
   fileUrl        String?
   // Extra metadata (code language, mentions, etc.).
@@ -786,11 +826,11 @@ model Review {
   author   User   @relation("ReviewAuthor", fields: [authorId], references: [id], onDelete: Cascade)
   target   User   @relation("ReviewTarget", fields: [targetId], references: [id], onDelete: Cascade)
 
-  rating   Int // 1-5
-  comment  String? @db.Text
+  rating  Int // 1-5
+  comment String? @db.Text
   // Reviews are hidden until both parties submit (or a deadline passes) to
-  // prevent retaliation bias — enforced at the service layer.
-  visible  Boolean @default(false)
+  // prevent retaliation bias 鈥?enforced at the service layer.
+  visible Boolean @default(false)
 
   createdAt DateTime @default(now())
 
@@ -842,15 +882,15 @@ enum NotificationType {
 }
 
 model Notification {
-  id      String           @id @default(cuid())
-  userId  String
-  user    User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type    NotificationType
-  title   String
-  body    String?
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  title     String
+  body      String?
   // Deep link into the app.
-  href    String?
-  readAt  DateTime?
+  href      String?
+  readAt    DateTime?
   // Set by the email worker once this notification has been fanned out over
   // email, so it is never sent twice. Null = not yet emailed.
   emailedAt DateTime?
@@ -862,13 +902,13 @@ model Notification {
 }
 
 // ============================================================================
-// COLD-START — EXTERNAL JOB INGESTION
+// COLD-START 鈥?EXTERNAL JOB INGESTION
 // ----------------------------------------------------------------------------
 // Seeds the marketplace with jobs scraped from public boards. Each scraped job
 // belongs to an UNCLAIMED client `User` (the company shell). When a freelancer
 // proposes, the notification worker emails the recruiter a magic link into a
 // tokenized, account-less portal (see RecruiterAccessToken). Everything after
-// that — proposals, messaging, notifications — reuses the normal models.
+// that 鈥?proposals, messaging, notifications 鈥?reuses the normal models.
 // ============================================================================
 
 enum JobSourceType {
@@ -880,14 +920,14 @@ enum JobSourceType {
 
 // Provenance for a scraped Job. One-to-one with Job.
 model JobSource {
-  id     String @id @default(cuid())
-  jobId  String @unique
-  job    Job    @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  id    String @id @default(cuid())
+  jobId String @unique
+  job   Job    @relation(fields: [jobId], references: [id], onDelete: Cascade)
 
-  source     JobSourceType
-  externalId String // the board's own id for this posting
-  url        String // canonical posting URL
-  applyUrl   String? // external apply link, when the board provides one
+  source         JobSourceType
+  externalId     String // the board's own id for this posting
+  url            String // canonical posting URL
+  applyUrl       String? // external apply link, when the board provides one
   // Email found *in* the posting itself (mailto:, body). Highest trust.
   publishedEmail String?
 
@@ -915,10 +955,10 @@ enum RecruiterEmailStatus {
   UNVERIFIED
   MX_OK // domain has MX records
   DELIVERABLE // SMTP RCPT accepted, domain is NOT catch-all
-  CATCH_ALL // domain accepts everything — low signal
+  CATCH_ALL // domain accepts everything 鈥?low signal
   RISKY // greylisted / role-based / inconclusive
   UNDELIVERABLE // hard reject
-  SUPPRESSED // bounced / complained / unsubscribed — never contact again
+  SUPPRESSED // bounced / complained / unsubscribed 鈥?never contact again
 }
 
 // Email + deliverability state for an UNCLAIMED recruiter shell. One per shell
@@ -934,7 +974,7 @@ model RecruiterContact {
   patternUsed   String? // e.g. "{first}.{last}", "hr@"
 
   status      RecruiterEmailStatus @default(UNVERIFIED)
-  confidence  Float                @default(0) // 0.0–1.0
+  confidence  Float                @default(0) // 0.0鈥?.0
   isCatchAll  Boolean              @default(false)
   // Computed gate: only true addresses may be emailed. Set by the discovery job.
   contactable Boolean              @default(false)
@@ -974,13 +1014,114 @@ model RecruiterAccessToken {
 }
 
 // ============================================================================
+// DOMESTIC (CN) — E-SIGNATURE & INVOICING
+// ============================================================================
+
+enum SignatureParty {
+  CLIENT
+  FREELANCER
+}
+
+enum SignatureStatus {
+  PENDING
+  SIGNED
+}
+
+// One row per party per contract. `provider` records how the signature was
+// captured: "manual" is the built-in click-to-sign consent record (typed legal
+// name + timestamp + IP); swap in e签宝/法大大 by setting ESIGN_DRIVER and
+// storing their flow reference in providerRef.
+model ContractSignature {
+  id         String   @id @default(cuid())
+  contractId String
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  party       SignatureParty
+  status      SignatureStatus @default(PENDING)
+  signerName  String?
+  provider    String          @default("manual")
+  providerRef String?
+  ip          String?
+  userAgent   String?
+  signedAt    DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@unique([contractId, userId])
+  @@index([contractId, party])
+  @@map("contract_signatures")
+}
+
+enum InvoiceType {
+  NORMAL // 增值税普通发票
+  VAT_SPECIAL // 增值税专用发票
+}
+
+enum InvoiceStatus {
+  REQUESTED
+  ISSUED
+  REJECTED
+}
+
+// Default invoicing details, reused when requesting an invoice.
+model InvoiceProfile {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title             String // 发票抬头
+  taxNumber         String? // 纳税人识别号
+  type              InvoiceType @default(NORMAL)
+  email             String?
+  bankName          String?
+  bankAccount       String?
+  registeredAddress String?
+  registeredPhone   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("invoice_profiles")
+}
+
+// An invoice request raised against a contract (one per request). Actual
+// issuance stays manual until a tax/e-invoice provider is connected.
+model Invoice {
+  id          String   @id @default(cuid())
+  contractId  String
+  contract    Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  applicantId String
+  applicant   User     @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+
+  amount   Int // minor units
+  currency String        @default("CNY")
+  type     InvoiceType   @default(NORMAL)
+  status   InvoiceStatus @default(REQUESTED)
+
+  title       String
+  taxNumber   String?
+  email       String?
+  providerRef String?
+  issuedAt    DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([contractId, status])
+  @@index([applicantId])
+  @@map("invoices")
+}
+
+// ============================================================================
 // AUDIT LOG  (security / compliance)
 // ============================================================================
 
 model AuditLog {
-  id        String   @id @default(cuid())
+  id        String  @id @default(cuid())
   userId    String?
-  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  user      User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
   action    String // e.g. "user.login", "job.publish", "payment.release"
   entity    String? // affected entity type
   entityId  String?

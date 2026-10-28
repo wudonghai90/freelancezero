@@ -17,7 +17,7 @@ export function ResendVerificationButton() {
         setState('sent');
       }}
     >
-      {state === 'sent' ? 'Sent — check your inbox.' : state === 'sending' ? 'Sending…' : 'Resend it.'}
+      {state === 'sent' ? '已发送 — 请查收邮箱。' : state === 'sending' ? '发送中…' : '重新发送'}
     </button>
   );
 }

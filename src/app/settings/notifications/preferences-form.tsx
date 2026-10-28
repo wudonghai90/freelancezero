@@ -69,7 +69,7 @@ export function PreferencesForm({
 
     if (!res.ok) {
       setPrefs(previous); // roll back
-      setError('Could not save that change.');
+      setError('保存失败，请稍后再试。');
       return;
     }
     setSaved(true);
@@ -86,24 +86,24 @@ export function PreferencesForm({
   return (
     <div>
       <section>
-        <h2 className="text-lg font-semibold">Privacy</h2>
+        <h2 className="text-lg font-semibold">隐私</h2>
         <div className="mt-2">
           <Toggle
-            label="Show my full name publicly"
+            label="公开显示我的全名"
             desc={
               prefs.showFullName
-                ? `Your profile shows "${exampleName}".`
-                : `Your profile shows "${abbreviated}". Turn this on to show your full name.`
+                ? `你的主页显示为「${exampleName}」。`
+                : `你的主页显示为「${abbreviated}」。开启后将显示全名。`
             }
             checked={prefs.showFullName}
             onChange={(v) => set('showFullName', v)}
           />
           <Toggle
-            label="Show my profile in search engines"
+            label="允许搜索引擎收录我的主页"
             desc={
               prefs.indexProfile
-                ? 'Your profile can appear in Google results — free inbound work. Turn off to keep it visible only to clients inside Freelancezero.'
-                : 'Your profile is hidden from search engines. Clients on Freelancezero can still find and view it.'
+                ? '你的主页可能出现在搜索结果中，带来自然流量。关闭后仅站内客户可见。'
+                : '你的主页不会出现在搜索引擎中，站内客户仍可搜索和查看。'
             }
             checked={prefs.indexProfile}
             onChange={(v) => set('indexProfile', v)}
@@ -112,29 +112,29 @@ export function PreferencesForm({
       </section>
 
       <section className="mt-8">
-        <h2 className="text-lg font-semibold">Email notifications</h2>
+        <h2 className="text-lg font-semibold">邮件通知</h2>
         <div className="mt-2">
           <Toggle
-            label="Proposals and applications"
-            desc="When someone applies to your job, or your proposal status changes."
+            label="投标与申请"
+            desc="有人投标你的需求，或你的投标状态发生变化时。"
             checked={prefs.notifyProposals}
             onChange={(v) => set('notifyProposals', v)}
           />
           <Toggle
-            label="Messages"
-            desc="When a client or freelancer sends you a message."
+            label="站内消息"
+            desc="客户或服务方给你发送消息时。"
             checked={prefs.notifyMessages}
             onChange={(v) => set('notifyMessages', v)}
           />
           <Toggle
-            label="Product news"
-            desc="Occasional updates about new features. No more than monthly."
+            label="产品动态"
+            desc="偶尔发送新功能介绍，每月不超过一次。"
             checked={prefs.notifyProductNews}
             onChange={(v) => set('notifyProductNews', v)}
           />
           <Toggle
-            label="Security and account emails"
-            desc="Email confirmation, password and payout changes. Always on for your safety."
+            label="安全与账号邮件"
+            desc="邮箱验证、密码与收款方式变更。为保障账号安全，始终开启。"
             checked
             disabled
             onChange={() => {}}
@@ -146,7 +146,7 @@ export function PreferencesForm({
         {error ? <p className="text-sm text-destructive">{error}</p> : null}
         {saved && !error ? (
           <p className="inline-flex items-center gap-1 text-sm text-green-600">
-            <Check className="size-4" /> Saved
+            <Check className="size-4" /> 已保存
           </p>
         ) : null}
       </div>

@@ -8,7 +8,7 @@ import { pageMetadata } from '@/lib/seo';
 export const metadata = pageMetadata({
   title: 'Careers — Build the Fair Freelance Marketplace',
   description:
-    'Join Freelancezero and help build the zero-fee, open-source freelance marketplace. Remote-first roles in engineering, design, and growth.',
+    'Join 自由工作平台 and help build the zero-fee, open-source freelance marketplace. Remote-first roles in engineering, design, and growth.',
   path: '/careers',
   keywords: ['freelancezero careers', 'remote startup jobs', 'open source jobs'],
 });
@@ -57,7 +57,7 @@ export default function CareersPage() {
         <Badge variant="secondary" className="mb-4">We’re hiring</Badge>
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Build the fair freelance economy</h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-          Freelancezero is a 100% free, open-source marketplace where freelancers keep everything they
+          自由工作平台 is a 100% free, open-source marketplace where freelancers keep everything they
           earn. We’re a small, remote team building for people — not shareholders.
         </p>
       </div>

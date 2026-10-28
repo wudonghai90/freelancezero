@@ -48,15 +48,15 @@ export function PayoutBanner() {
       <div className="container flex items-center gap-3 py-2 text-sm">
         <AlertTriangle className="size-4 shrink-0 text-amber-600" />
         <p className="flex-1">
-          You haven’t set up a payment method yet.{' '}
+          你还没有设置收款方式。{' '}
           <Link href="/settings/payments" className="font-medium underline underline-offset-2">
-            Add one
+            立即添加
           </Link>{' '}
-          so you can get paid.
+          以便接收款项。
         </p>
         <button
           onClick={() => setDismissed(true)}
-          aria-label="Dismiss"
+          aria-label="关闭"
           className="rounded p-1 text-muted-foreground transition-colors hover:text-foreground"
         >
           <X className="size-4" />

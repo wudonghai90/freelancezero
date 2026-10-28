@@ -8,7 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { ApproveButton } from './approve-button';
 
-export const metadata = { title: 'Account approvals' };
+export const metadata = { title: '账号审核' };
 export const dynamic = 'force-dynamic';
 
 /**
@@ -31,6 +31,9 @@ export default async function ApprovalsPage() {
       role: true,
       image: true,
       createdAt: true,
+      autoReviewStatus: true,
+      autoReviewScore: true,
+      autoReviewReason: true,
       clientProfile: { select: { companyName: true } },
       freelancerProfile: { select: { headline: true } },
     },
@@ -39,17 +42,17 @@ export default async function ApprovalsPage() {
   return (
     <div>
       <div className="flex items-center gap-3">
-        <h2 className="text-xl font-semibold">Account approvals</h2>
-        <Badge variant="secondary">{pending.length} pending</Badge>
+        <h2 className="text-xl font-semibold">账号审核</h2>
+        <Badge variant="secondary">{pending.length} 个待审核</Badge>
       </div>
       <p className="mt-1 text-muted-foreground">
-        Approving lets the user post or apply to jobs. This is the last line of defense against spam.
+        AI 会自动通过无明显异常的账号；标记为“建议复核”或 AI 不可用的账号在这里人工处理。
       </p>
 
       {pending.length === 0 ? (
         <Card className="mt-8">
           <CardContent className="py-8 text-center text-muted-foreground">
-            Nobody waiting — the queue is clear.
+            暂无待审核账号。
           </CardContent>
         </Card>
       ) : (
@@ -67,9 +70,22 @@ export default async function ApprovalsPage() {
                     {u.clientProfile?.companyName ?? u.freelancerProfile?.headline ?? u.email}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    Joined {u.createdAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    注册于 {u.createdAt.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })}
                   </p>
+                  {u.autoReviewReason ? (
+                    <p className="mt-1 text-xs text-amber-600">
+                      AI：{u.autoReviewReason}
+                      {u.autoReviewScore != null ? `（风险 ${u.autoReviewScore}）` : ''}
+                    </p>
+                  ) : null}
                 </div>
+                {u.autoReviewStatus === 'FLAGGED' ? (
+                  <Badge variant="outline" className="border-amber-500 text-amber-600">
+                    AI 建议复核
+                  </Badge>
+                ) : u.autoReviewStatus === 'FAILED' ? (
+                  <Badge variant="outline">AI 不可用</Badge>
+                ) : null}
                 <Badge variant="outline">{u.role.toLowerCase().replace('_', ' ')}</Badge>
                 <ApproveButton userId={u.id} />
               </CardContent>

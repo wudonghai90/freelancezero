@@ -26,7 +26,7 @@ export function POST(req: Request) {
       where: { id: proposalId, job: { clientId: session.user.id } },
       select: { id: true, freelancerId: true, job: { select: { id: true, title: true } } },
     });
-    if (!proposal) return fail('Applicant not found for your postings', 404);
+    if (!proposal) return fail('未找到该投标人', 404);
 
     // Prefer the company name; fall back to the client's own name so the
     // freelancer sees who is actually contacting them, never a placeholder.

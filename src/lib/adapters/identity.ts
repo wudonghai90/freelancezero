@@ -14,7 +14,7 @@
  * Configure with IDENTITY_DRIVER. Default `none` means the feature is simply
  * unavailable rather than silently pretending to verify anyone.
  */
-export type IdentityDriver = 'none' | 'stripe';
+export type IdentityDriver = 'none' | 'manual' | 'stripe';
 
 export interface StartVerificationParams {
   userId: string;
@@ -49,6 +49,19 @@ const noneAdapter: IdentityAdapter = {
   configured: false,
   async startVerification() {
     throw new Error('Identity verification is not configured on this instance');
+  },
+  parseWebhook: () => null,
+};
+
+/**
+ * 人工认证：用户提交真实姓名后进入 PENDING，由管理员在后台核对并置为
+ * VERIFIED。没有自动核验能力，所以绝不把用户标记成已验证。
+ */
+const manualAdapter: IdentityAdapter = {
+  driver: 'manual',
+  configured: true,
+  async startVerification({ userId }) {
+    return { url: '', ref: `manual:${userId}` };
   },
   parseWebhook: () => null,
 };
@@ -120,6 +133,8 @@ export function getIdentityAdapter(): IdentityAdapter {
   switch (process.env.IDENTITY_DRIVER) {
     case 'stripe':
       return stripeAdapter;
+    case 'manual':
+      return manualAdapter;
     default:
       return noneAdapter;
   }

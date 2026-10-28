@@ -121,7 +121,7 @@ export function JobRow({ job }: { job: AdminJob }) {
                   id={`c-${job.id}`}
                   name="companyName"
                   defaultValue={job.companyName}
-                  placeholder="Acme Inc."
+                  placeholder="例如：星澜科技"
                   maxLength={120}
                 />
               </div>

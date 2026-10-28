@@ -1,5 +1,7 @@
+import { after } from 'next/server';
 import { db } from '@/lib/db';
 import { auth } from '@/lib/auth';
+import { runAutoReview } from '@/lib/ai/moderation';
 import { ok, forbidden, unauthorized, handle } from '@/lib/api';
 import { profileSchema } from '@/lib/validations/profile';
 import { recomputeCompleteness } from '@/lib/profile-completeness';
@@ -57,6 +59,10 @@ export function POST(req: Request) {
     // Keep the denormalized score fresh — it drives ranking and the
     // proposal quality score.
     const completeness = await recomputeCompleteness(session.user.id);
+
+    after(() =>
+      runAutoReview(session.user.id).catch((err) => console.error('[ai-moderation]', err)),
+    );
 
     return ok({ headline: body.headline, completeness });
   });

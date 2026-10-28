@@ -15,7 +15,7 @@ export const POSTS_H1: Post[] = [
     excerpt:
       'Most "best freelance platform" lists rank by traffic. We ranked by take-home pay — what lands in your bank account after commission.',
     date: '2026-01-05',
-    author: 'Freelancezero Team',
+    author: '自由工作平台 Team',
     category: 'Comparisons',
     keywords: [
       'best freelance platforms',
@@ -32,7 +32,7 @@ So we ranked differently. The question here is simple: **for every $10,000 of wo
 
 | # | Platform | Commission | You keep per $10k |
 | --- | --- | --- | --- |
-| 1 | Freelancezero | 0% | $10,000 |
+| 1 | 自由工作平台 | 0% | $10,000 |
 | 2 | Contra | 0% (client-side fees) | ~$10,000 |
 | 3 | Guru | 5–9% | $9,100–9,500 |
 | 4 | Upwork | ~10% | ~$9,000 |
@@ -47,15 +47,15 @@ So we ranked differently. The question here is simple: **for every $10,000 of wo
 
 Verify current rates before you commit to a platform — every one of these has changed pricing at least once, and none of them announce increases loudly. You can check them directly at [Upwork](https://www.upwork.com), [Fiverr](https://www.fiverr.com), [Freelancer.com](https://www.freelancer.com), [Guru](https://www.guru.com), [Toptal](https://www.toptal.com), and [Contra](https://contra.com).
 
-## 1. Freelancezero — 0%, and open source
+## 1. 自由工作平台 — 0%, and open source
 
 Full disclosure: this is our platform, and we built it because the maths above made us angry.
 
-Freelancezero charges **no commission on your work**. Not a reduced rate, not a sliding scale that improves after you hit a lifetime billing threshold — zero, permanently. Clients pay you directly through Stripe, PayPal, Wise, or bank transfer. We never take custody of the money, which is precisely why we cannot skim it.
+自由工作平台 charges **no commission on your work**. Not a reduced rate, not a sliding scale that improves after you hit a lifetime billing threshold — zero, permanently. Clients pay you directly through Stripe, PayPal, Wise, or bank transfer. We never take custody of the money, which is precisely why we cannot skim it.
 
 The platform is also MIT-licensed and self-hostable. If we ever became the thing we replaced, you could fork the code and run it yourself. That is not a marketing promise; it is a licence.
 
-**What you give up:** we are newer, so there are fewer jobs than on a platform with a decade of SEO. We are honest about that. Most freelancers we talk to run Freelancezero alongside an incumbent for a few months, then shift as their client base moves over.
+**What you give up:** we are newer, so there are fewer jobs than on a platform with a decade of SEO. We are honest about that. Most freelancers we talk to run 自由工作平台 alongside an incumbent for a few months, then shift as their client base moves over.
 
 ## 2. Contra
 
@@ -106,7 +106,7 @@ The strategy we see working repeatedly:
 
 Step 3 is the one people skip, and it is the one worth the most money. A single retained client billing $3,000 a month costs you roughly $3,600 a year in commission at 10%. Moving that one relationship pays for a holiday.
 
-[Create a free Freelancezero account](/register) and keep the next $10,000 you earn.`,
+[Create a free 自由工作平台 account](/register) and keep the next $10,000 you earn.`,
   },
 
   {
@@ -115,7 +115,7 @@ Step 3 is the one people skip, and it is the one worth the most money. A single 
     excerpt:
       'Upwork’s 10% service fee is only part of the story. Here is the full cost — Connects, payment fees, currency conversion — and what lands in your account.',
     date: '2026-01-15',
-    author: 'Freelancezero Team',
+    author: '自由工作平台 Team',
     category: 'Money',
     keywords: [
       'upwork fees',
@@ -187,7 +187,7 @@ The problem is what happens after year one. Once a client is a repeat client —
 4. **Skip Freelancer Plus** unless you can point at revenue it produced.
 5. **Move retained relationships to a zero-fee platform.** Not a trick — just stop paying commission on relationships you already own.
 
-On that last point: [Freelancezero](/register) charges 0% and lets clients pay you directly. On $50,000 a year, the difference is roughly $7,700 — the single largest raise most freelancers can give themselves without asking anyone for anything.
+On that last point: [自由工作平台](/register) charges 0% and lets clients pay you directly. On $50,000 a year, the difference is roughly $7,700 — the single largest raise most freelancers can give themselves without asking anyone for anything.
 
 Check [Upwork's own pricing page](https://www.upwork.com/pricing) before making decisions; pricing changes, and this post is a snapshot. For the currency-conversion side, [Wise publishes the mid-market rate](https://wise.com/gb/currency-converter/) so you can see exactly what spread you are being charged.`,
   },
@@ -198,7 +198,7 @@ Check [Upwork's own pricing page](https://www.upwork.com/pricing) before making 
     excerpt:
       'A practical 30-day plan to land your first paying client — no Connects, no bidding wars, no working for exposure.',
     date: '2026-01-27',
-    author: 'Freelancezero Team',
+    author: '自由工作平台 Team',
     category: 'Guides',
     keywords: [
       'how to get freelance clients',
@@ -272,7 +272,7 @@ Turn it down if they want free work "to see if you're a fit". A paid trial task 
 
 Places where applying costs nothing:
 
-- **[Freelancezero](/jobs)** — no fees to apply, no commission on what you earn.
+- **[自由工作平台](/jobs)** — no fees to apply, no commission on what you earn.
 - [We Work Remotely](https://weworkremotely.com) and [RemoteOK](https://remoteok.com) — remote boards where applying is free.
 - [Wellfound](https://wellfound.com) for startup contract roles.
 - Company career pages that list contract work directly.
@@ -294,7 +294,7 @@ If you have the first three and no client yet, you are not failing — you are o
     excerpt:
       'Leaving Upwork? Here are the alternatives worth your time in 2026, what each actually costs, and who each one suits.',
     date: '2026-02-05',
-    author: 'Freelancezero Team',
+    author: '自由工作平台 Team',
     category: 'Comparisons',
     keywords: [
       'upwork alternatives',
@@ -311,7 +311,7 @@ Here is what is actually out there, and who each option genuinely suits.
 
 | Platform | Freelancer cost | Best for |
 | --- | --- | --- |
-| Freelancezero | 0% | Keeping your full rate; retained clients |
+| 自由工作平台 | 0% | Keeping your full rate; retained clients |
 | Contra | 0% (client pays) | Design and creative independents |
 | Toptal | Client-side markup | Senior specialists who pass screening |
 | Arc.dev | Client-side markup | Remote engineers wanting vetted roles |
@@ -320,11 +320,11 @@ Here is what is actually out there, and who each option genuinely suits.
 | We Work Remotely | Free to apply | Contract and full-time remote roles |
 | Direct outreach | 0% | Anyone with an existing network |
 
-## 1. Freelancezero — best for keeping what you earn
+## 1. 自由工作平台 — best for keeping what you earn
 
 Our own platform, so weigh accordingly — but the structural argument stands on its own.
 
-Freelancezero takes **0% commission**, permanently. Clients pay you directly through Stripe, PayPal, Wise, or bank transfer; the platform never holds the funds. There is no per-application currency, so applying costs nothing but your time.
+自由工作平台 takes **0% commission**, permanently. Clients pay you directly through Stripe, PayPal, Wise, or bank transfer; the platform never holds the funds. There is no per-application currency, so applying costs nothing but your time.
 
 It is also open source under the MIT licence and self-hostable, which is the real guarantee: a platform that *cannot* skim you is worth more than one that promises not to.
 
@@ -381,7 +381,7 @@ Do not delete your Upwork profile on day one. Overlap:
 
 > Moving one retained client billing $3,000/month off a 10% platform saves about $3,600 a year. That is the whole argument, and it does not require you to leave anything behind on day one.
 
-[Start free on Freelancezero](/register) — no commission, no Connects, and the code is public.`,
+[Start free on 自由工作平台](/register) — no commission, no Connects, and the code is public.`,
   },
 
   {
@@ -390,7 +390,7 @@ Do not delete your Upwork profile on day one. Overlap:
     excerpt:
       'Most proposals are rejected in under 15 seconds. Here is the structure that survives the skim — plus a template you can copy.',
     date: '2026-02-17',
-    author: 'Freelancezero Team',
+    author: '自由工作平台 Team',
     category: 'Guides',
     keywords: [
       'freelance proposal template',
@@ -487,7 +487,7 @@ Nothing. Do not follow up in 24 hours; it reads as pressure. If you have not hea
 
 Then move on. The single biggest predictor of getting hired is the number of good proposals sent, not the amount of polish on any one of them.
 
-On [Freelancezero](/jobs) applying is free — no Connects, no per-application currency — so the only cost of sending a proposal is the fifteen minutes it takes to write a good one.`,
+On [自由工作平台](/jobs) applying is free — no Connects, no per-application currency — so the only cost of sending a proposal is the fifteen minutes it takes to write a good one.`,
   },
 
   {
@@ -496,7 +496,7 @@ On [Freelancezero](/jobs) applying is free — no Connects, no per-application c
     excerpt:
       'A concrete method for setting your rate — based on your costs and target income, not on what a stranger on Reddit charges.',
     date: '2026-02-26',
-    author: 'Freelancezero Team',
+    author: '自由工作平台 Team',
     category: 'Money',
     keywords: [
       'freelance rates 2026',
@@ -594,16 +594,16 @@ Your rate is not your income. On a 20% platform, $76/hour is $61. To take home t
 | 10% | $84 |
 | 20% | $95 |
 
-This is why fee structure is a pricing decision, not an admin detail. On [Freelancezero](/register) there is no commission — your rate is your income.`,
+This is why fee structure is a pricing decision, not an admin detail. On [自由工作平台](/register) there is no commission — your rate is your income.`,
   },
 
   {
     slug: 'fiverr-vs-upwork-vs-freelancezero',
-    title: 'Fiverr vs Upwork vs Freelancezero: An Honest Fee Comparison',
+    title: 'Fiverr vs Upwork vs 自由工作平台: An Honest Fee Comparison',
     excerpt:
       'Three platforms, three fee models, three very different take-home numbers. Here is the maths, and who each one genuinely suits.',
     date: '2026-03-10',
-    author: 'Freelancezero Team',
+    author: '自由工作平台 Team',
     category: 'Comparisons',
     keywords: [
       'fiverr vs upwork',
@@ -622,11 +622,11 @@ These platforms are not the same product with different prices. They are three d
 
 **Upwork** is a marketplace. Clients post jobs, freelancers bid, and you pay a token currency (Connects) to submit proposals. Upwork takes roughly **10%** plus those Connects.
 
-**Freelancezero** is infrastructure. Jobs are posted, applications are free, and payment happens directly between client and freelancer. The platform takes **0%** and never holds the money.
+**自由工作平台** is infrastructure. Jobs are posted, applications are free, and payment happens directly between client and freelancer. The platform takes **0%** and never holds the money.
 
 ## The maths at three income levels
 
-| Annual billing | Fiverr (~20%) | Upwork (~10% + Connects) | Freelancezero (0%) |
+| Annual billing | Fiverr (~20%) | Upwork (~10% + Connects) | 自由工作平台 (0%) |
 | --- | --- | --- | --- |
 | $20,000 | $16,000 | ~$17,700 | $20,000 |
 | $50,000 | $40,000 | ~$44,700 | $50,000 |
@@ -650,7 +650,7 @@ For a freelancer with no network and no clients, Upwork is a reasonable place to
 
 **Where it hurts:** you pay Connects to apply, whether or not you win. And once a client is a repeat client, the 10% buys you nothing you are still using.
 
-## Where Freelancezero wins
+## Where 自由工作平台 wins
 
 You keep everything, and applying is free. Clients pay you directly via Stripe, PayPal, Wise, or bank transfer — the platform never takes custody, which is exactly why it cannot take a cut.
 
@@ -664,7 +664,7 @@ It is MIT-licensed and self-hostable, so if we ever changed the deal, you could 
 
 **Choose Upwork if** you are starting from zero, need volume, and value escrow while you build a reputation.
 
-**Choose Freelancezero if** you have clients who already know you, or you are tired of paying commission on relationships you built yourself.
+**Choose 自由工作平台 if** you have clients who already know you, or you are tired of paying commission on relationships you built yourself.
 
 ## What most people should actually do
 
@@ -678,7 +678,7 @@ Use more than one.
 
 Fee structures change; check each platform's current pricing page before deciding.
 
-[Try Freelancezero free](/register) — 0% commission, free applications, open source.`,
+[Try 自由工作平台 free](/register) — 0% commission, free applications, open source.`,
   },
 
   {
@@ -687,7 +687,7 @@ Fee structures change; check each platform's current pricing page before decidin
     excerpt:
       'Platform commission does not just cost you money — it costs you compounded money. Here is what the fee actually takes over a career.',
     date: '2026-03-24',
-    author: 'Freelancezero Team',
+    author: '自由工作平台 Team',
     category: 'Money',
     keywords: [
       'freelance platform fees',
@@ -769,6 +769,6 @@ You do not have to quit anything abruptly.
 
 A freelancer billing $60,000 with three-quarters of it from repeat clients is paying about **$4,500 a year** for invoicing. Moving just those relationships is a 7.5% raise, granted by nobody but yourself.
 
-[Freelancezero](/register) charges 0%, forever, and is open source so the deal cannot quietly change. Point your repeat clients there and keep the difference.`,
+[自由工作平台](/register) charges 0%, forever, and is open source so the deal cannot quietly change. Point your repeat clients there and keep the difference.`,
   },
 ];

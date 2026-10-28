@@ -52,7 +52,7 @@ export function CompanyForm({
 
     if (!res.ok || !prefRes.ok) {
       const body = await (res.ok ? prefRes : res).json().catch(() => null);
-      setError(body?.error?.message ?? 'Could not save. Check the fields and try again.');
+      setError(body?.error?.message ?? '保存失败，请检查填写内容后重试。');
       return;
     }
     setSaved(true);
@@ -63,26 +63,26 @@ export function CompanyForm({
   return (
     <form onSubmit={onSubmit} className="grid gap-5">
       <div className="grid gap-2">
-        <Label htmlFor="name">Your name</Label>
+        <Label htmlFor="name">你的姓名</Label>
         <Input id="name" name="name" defaultValue={initial.name} maxLength={120} required />
       </div>
 
       <div className="grid gap-2">
-        <Label htmlFor="companyName">Company name</Label>
+        <Label htmlFor="companyName">公司名称</Label>
         <Input
           id="companyName"
           name="companyName"
           defaultValue={initial.companyName}
-          placeholder="Northwind Labs"
+          placeholder="例如：星澜科技"
           maxLength={120}
         />
         <p className="text-xs text-muted-foreground">
-          Shown to freelancers on your job postings and messages. Leave empty to use your own name.
+          显示在需求与消息中。留空则使用你的姓名。
         </p>
       </div>
 
       <div className="grid gap-2">
-        <Label htmlFor="companyUrl">Company website</Label>
+        <Label htmlFor="companyUrl">公司网站</Label>
         <Input
           id="companyUrl"
           name="companyUrl"
@@ -93,24 +93,24 @@ export function CompanyForm({
       </div>
 
       <div className="grid gap-2">
-        <Label htmlFor="location">Location</Label>
+        <Label htmlFor="location">所在地</Label>
         <Input
           id="location"
           name="location"
           defaultValue={initial.location}
-          placeholder="Amsterdam, Netherlands"
+          placeholder="上海，中国"
           maxLength={120}
         />
       </div>
 
       <div className="grid gap-2">
-        <Label htmlFor="about">About</Label>
+        <Label htmlFor="about">公司介绍</Label>
         <textarea
           id="about"
           name="about"
           rows={5}
           defaultValue={initial.about}
-          placeholder="What your company does, and what you typically hire for."
+          placeholder="介绍公司业务，以及通常招聘哪类人才。"
           className="w-full rounded-md border bg-background p-3 text-sm"
         />
       </div>
@@ -119,9 +119,9 @@ export function CompanyForm({
 
       <div className="flex items-center gap-3">
         <Button type="submit" disabled={busy}>
-          {busy ? 'Saving…' : 'Save'}
+          {busy ? '保存中…' : '保存'}
         </Button>
-        {saved ? <span className="text-sm text-green-600">Saved ✓</span> : null}
+        {saved ? <span className="text-sm text-green-600">已保存</span> : null}
       </div>
     </form>
   );

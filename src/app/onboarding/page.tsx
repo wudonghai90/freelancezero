@@ -7,9 +7,9 @@ import { OnboardingWizard } from './wizard';
 // contradicts the page.
 export async function generateMetadata() {
   const session = await auth();
-  if (!session?.user) return { title: 'Finish setting up' };
+  if (!session?.user) return { title: '完成账号设置' };
   const state = await getOnboarding(session.user.id, session.user.role);
-  return { title: state.complete ? "You're all set" : 'Finish setting up' };
+  return { title: state.complete ? '全部完成' : '完成账号设置' };
 }
 export const dynamic = 'force-dynamic';
 
@@ -29,7 +29,6 @@ export default async function OnboardingPage() {
         isFreelancer={state.isFreelancer}
         email={state.user?.email ?? ''}
         initialHeadline={state.user?.freelancerProfile?.headline ?? ''}
-        initialHourlyRate={state.user?.freelancerProfile?.hourlyRate ?? null}
         initialLocation={state.user?.freelancerProfile?.location ?? ''}
         payout={{
           provider: (state.user?.payoutProvider ?? null) as

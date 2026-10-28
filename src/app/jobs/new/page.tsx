@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { JobForm } from './job-form';
 
-export const metadata = { title: 'Post a job' };
+export const metadata = { title: '发布需求 — OPC' };
 export const dynamic = 'force-dynamic';
 
 const CLIENT_ROLES = ['CLIENT', 'AGENCY_OWNER', 'ADMIN'];
@@ -18,9 +18,6 @@ export default async function NewJobPage() {
 
   const canPost = CLIENT_ROLES.includes(session.user.role);
 
-  // Posting requires an approved account — send unapproved clients back through
-  // onboarding (where the pending-approval state is shown) rather than letting
-  // them fill a form only to be rejected on submit. Admins are exempt.
   if (canPost && session.user.role !== 'ADMIN') {
     const me = await db.user.findUnique({
       where: { id: session.user.id },
@@ -31,9 +28,9 @@ export default async function NewJobPage() {
 
   return (
     <div className="container max-w-2xl py-12">
-      <h1 className="text-3xl font-bold">Post a job</h1>
+      <h1 className="text-3xl font-bold">发布需求</h1>
       <p className="mt-1 mb-8 text-muted-foreground">
-        Reach freelancers directly. Zero platform fees — always.
+        直接触达服务方。平台不抽佣，按里程碑验收付款。
       </p>
 
       {canPost ? (
@@ -41,11 +38,9 @@ export default async function NewJobPage() {
       ) : (
         <Card>
           <CardContent className="flex flex-col items-center gap-3 py-10 text-center">
-            <p className="text-muted-foreground">
-              You’re signed in as a freelancer, so you can’t post jobs from this account.
-            </p>
+            <p className="text-muted-foreground">当前是服务方账号，无法发布需求。</p>
             <Button asChild>
-              <Link href="/jobs">Find work instead</Link>
+              <Link href="/jobs">去需求大厅</Link>
             </Button>
           </CardContent>
         </Card>

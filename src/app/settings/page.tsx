@@ -1,16 +1,24 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { Wallet, ShieldCheck, User, Bell, ChevronRight } from 'lucide-react';
+import { Wallet, ShieldCheck, User, Bell, ChevronRight, FileText } from 'lucide-react';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AvatarUpload } from '@/components/avatar-upload';
 
-export const metadata = { title: 'Settings' };
+export const metadata = { title: '设置 — OPC' };
 export const dynamic = 'force-dynamic';
 
 const FREELANCER_ROLES = ['FREELANCER', 'AGENCY_OWNER', 'AGENCY_MEMBER'];
+
+const ROLE_LABEL: Record<string, string> = {
+  CLIENT: '委托方',
+  FREELANCER: '服务方',
+  AGENCY_OWNER: '工作室负责人',
+  AGENCY_MEMBER: '工作室成员',
+  ADMIN: '管理员',
+};
 
 export default async function SettingsPage() {
   const session = await auth();
@@ -32,29 +40,32 @@ export default async function SettingsPage() {
   if (!user) redirect('/login');
 
   const isFreelancer = FREELANCER_ROLES.includes(user.role);
-  const memberSince = user.createdAt.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  const memberSince = user.createdAt.toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+  });
 
   return (
     <div className="container max-w-2xl py-12">
-      <h1 className="text-3xl font-bold">Settings</h1>
-      <p className="mt-1 mb-8 text-muted-foreground">Manage your account, payouts, and security.</p>
+      <h1 className="text-3xl font-bold">设置</h1>
+      <p className="mt-1 mb-8 text-muted-foreground">管理账号、收款、发票与安全设置。</p>
 
       <Card>
         <CardHeader className="flex-row items-center gap-2 space-y-0">
           <User className="size-5 text-primary" />
-          <CardTitle>Account</CardTitle>
+          <CardTitle>账号</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-3 text-sm">
           <div className="border-b pb-4">
             <AvatarUpload image={user.image} name={user.name} email={user.email} />
           </div>
-          <Row label="Name" value={user.name ?? '—'} />
-          <Row label="Email" value={user.email} />
+          <Row label="姓名" value={user.name ?? '—'} />
+          <Row label="邮箱" value={user.email} />
           <Row
-            label="Account type"
-            value={<Badge variant="secondary">{user.role.toLowerCase().replace('_', ' ')}</Badge>}
+            label="账号类型"
+            value={<Badge variant="secondary">{ROLE_LABEL[user.role] ?? user.role}</Badge>}
           />
-          <Row label="Member since" value={memberSince} />
+          <Row label="加入时间" value={memberSince} />
         </CardContent>
       </Card>
 
@@ -62,34 +73,40 @@ export default async function SettingsPage() {
         <LinkCard
           href="/settings/profile"
           icon={User}
-          title={isFreelancer ? 'Public profile' : 'Your identity'}
+          title={isFreelancer ? '公开资料' : '企业资料'}
           desc={
             isFreelancer
-              ? 'Your headline, bio, rate, availability, and links — what clients see.'
-              : 'Company name, website, and about — how freelancers see you.'
+              ? '标题、简介、报价与可接单状态——客户看到的内容。'
+              : '公司名称、网址与介绍——服务方看到的内容。'
           }
         />
         <LinkCard
           href="/settings/payments"
           icon={Wallet}
-          title={isFreelancer ? 'Get paid' : 'Billing & payments'}
+          title={isFreelancer ? '收款方式' : '付款方式'}
           desc={
             isFreelancer
-              ? 'Connect a payout method and keep 100% of what you earn.'
-              : 'Choose how you pay talent — directly, with zero platform fees.'
+              ? '绑定支付宝、微信或银行卡，平台不抽佣。'
+              : '选择向服务方付款的方式，平台不抽佣。'
           }
+        />
+        <LinkCard
+          href="/settings/invoices"
+          icon={FileText}
+          title="发票信息"
+          desc="保存默认抬头、税号与接收邮箱，合同结算后可直接申请开票。"
         />
         <LinkCard
           href="/settings/notifications"
           icon={Bell}
-          title="Notifications & privacy"
-          desc={`Email preferences · Public name shows as ${user.showFullName ? 'your full name' : 'first name + initial'}.`}
+          title="通知与隐私"
+          desc={`邮件通知偏好 · 公开姓名显示为${user.showFullName ? '全名' : '姓氏 + 首字母'}。`}
         />
         <LinkCard
           href="/settings/security"
           icon={ShieldCheck}
-          title="Security"
-          desc={`Password ${user.passwordHash ? 'set' : 'not set'} · Two-factor ${user.twoFactorEnabled ? 'enabled' : 'off'}.`}
+          title="安全"
+          desc={`密码${user.passwordHash ? '已设置' : '未设置'} · 两步验证${user.twoFactorEnabled ? '已开启' : '未开启'}。`}
         />
       </div>
     </div>

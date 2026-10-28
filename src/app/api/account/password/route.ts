@@ -10,11 +10,11 @@ const schema = z.object({
   currentPassword: z.string().optional(),
   newPassword: z
     .string()
-    .min(8, 'Use at least 8 characters')
-    .max(200)
-    .regex(/[a-z]/, 'Include a lowercase letter')
-    .regex(/[A-Z]/, 'Include an uppercase letter')
-    .regex(/[0-9]/, 'Include a number'),
+    .min(8, '密码至少 8 位')
+    .max(200, '密码最多 200 位')
+    .regex(/[a-z]/, '密码需包含小写字母')
+    .regex(/[A-Z]/, '密码需包含大写字母')
+    .regex(/[0-9]/, '密码需包含数字'),
 });
 
 /** POST /api/account/password — set or change the account password. */
@@ -33,9 +33,9 @@ export function POST(req: Request) {
 
     // Accounts that already have a password must prove they know it.
     if (user.passwordHash) {
-      if (!currentPassword) return fail('Enter your current password', 422);
+      if (!currentPassword) return fail('请输入当前密码', 422);
       const okCurrent = await bcrypt.compare(currentPassword, user.passwordHash);
-      if (!okCurrent) return fail('Current password is incorrect', 422);
+      if (!okCurrent) return fail('当前密码不正确', 422);
     }
 
     await db.user.update({
@@ -53,7 +53,7 @@ export function POST(req: Request) {
         user.email,
         'Your password was changed',
         `Hi ${user.name ?? 'there'},\n\n` +
-          `The password on your Freelancezero account was just changed.\n\n` +
+          `The password on your 自由工作平台 account was just changed.\n\n` +
           `If this wasn't you, reset your password immediately and contact support.`,
       );
     }

@@ -35,7 +35,6 @@ export function JobForm() {
       title: String(form.get('title') ?? '').trim(),
       description: String(form.get('description') ?? '').trim(),
       budgetType,
-      // For fixed price a single amount is fine; mirror it into both bounds.
       budgetMin: budgetType === 'FIXED' ? (max ?? min) : min,
       budgetMax: budgetType === 'FIXED' ? (max ?? min) : max,
       experience,
@@ -53,7 +52,7 @@ export function JobForm() {
 
     if (!res.ok) {
       const data = await res.json().catch(() => null);
-      setError(data?.error?.message ?? 'Could not post the job. Check the fields and try again.');
+      setError(data?.error?.message ?? '发布失败，请检查填写内容后重试。');
       return;
     }
     const { data } = await res.json();
@@ -64,42 +63,54 @@ export function JobForm() {
   return (
     <form onSubmit={onSubmit} className="grid gap-5">
       <div className="grid gap-2">
-        <Label htmlFor="title">Title</Label>
-        <Input id="title" name="title" required minLength={8} maxLength={120}
-          placeholder="e.g. Senior React engineer for analytics dashboard" />
+        <Label htmlFor="title">需求标题</Label>
+        <Input
+          id="title"
+          name="title"
+          required
+          minLength={8}
+          maxLength={120}
+          placeholder="例如：为数据看板招募资深前端工程师"
+        />
       </div>
 
       <div className="grid gap-2">
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description">需求描述</Label>
         <textarea
-          id="description" name="description" required minLength={40} rows={8}
-          placeholder="What needs doing, the stack, timeline, and what a great applicant looks like."
+          id="description"
+          name="description"
+          required
+          minLength={40}
+          rows={8}
+          placeholder="要做什么、技术栈、时间节点，以及你希望服务方具备什么经验（至少 40 字）。"
           className="w-full rounded-md border bg-background p-3 text-sm"
         />
       </div>
 
       <div className="grid gap-2 sm:grid-cols-2">
         <div className="grid gap-2">
-          <Label htmlFor="budgetType">Budget type</Label>
+          <Label htmlFor="budgetType">预算方式</Label>
           <select
-            id="budgetType" value={budgetType}
+            id="budgetType"
+            value={budgetType}
             onChange={(e) => setBudgetType(e.target.value as BudgetType)}
             className="h-10 rounded-md border bg-background px-3 text-sm"
           >
-            <option value="FIXED">Fixed price</option>
-            <option value="HOURLY">Hourly</option>
+            <option value="FIXED">固定总价</option>
+            <option value="HOURLY">按小时</option>
           </select>
         </div>
         <div className="grid gap-2">
-          <Label htmlFor="experience">Experience level</Label>
+          <Label htmlFor="experience">经验要求</Label>
           <select
-            id="experience" value={experience}
+            id="experience"
+            value={experience}
             onChange={(e) => setExperience(e.target.value as Experience)}
             className="h-10 rounded-md border bg-background px-3 text-sm"
           >
-            <option value="ENTRY">Entry</option>
-            <option value="INTERMEDIATE">Intermediate</option>
-            <option value="EXPERT">Expert</option>
+            <option value="ENTRY">入门</option>
+            <option value="INTERMEDIATE">中级</option>
+            <option value="EXPERT">专家</option>
           </select>
         </div>
       </div>
@@ -107,24 +118,52 @@ export function JobForm() {
       <div className="grid gap-2 sm:grid-cols-2">
         {budgetType === 'FIXED' ? (
           <div className="grid gap-2">
-            <Label htmlFor="budgetMax">Fixed price (USD)</Label>
-            <Input id="budgetMax" name="budgetMax" type="number" min="1" step="1" placeholder="5000" />
+            <Label htmlFor="budgetMax">总价（元）</Label>
+            <Input
+              id="budgetMax"
+              name="budgetMax"
+              type="number"
+              min="1"
+              step="1"
+              placeholder="30000"
+            />
           </div>
         ) : (
           <>
             <div className="grid gap-2">
-              <Label htmlFor="budgetMin">Min rate (USD/hr)</Label>
-              <Input id="budgetMin" name="budgetMin" type="number" min="1" step="1" placeholder="40" />
+              <Label htmlFor="budgetMin">最低时薪（元/小时）</Label>
+              <Input
+                id="budgetMin"
+                name="budgetMin"
+                type="number"
+                min="1"
+                step="1"
+                placeholder="300"
+              />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="budgetMax">Max rate (USD/hr)</Label>
-              <Input id="budgetMax" name="budgetMax" type="number" min="1" step="1" placeholder="80" />
+              <Label htmlFor="budgetMax">最高时薪（元/小时）</Label>
+              <Input
+                id="budgetMax"
+                name="budgetMax"
+                type="number"
+                min="1"
+                step="1"
+                placeholder="600"
+              />
             </div>
           </>
         )}
         <div className="grid gap-2">
-          <Label htmlFor="estimatedDays">Estimated days (optional)</Label>
-          <Input id="estimatedDays" name="estimatedDays" type="number" min="1" step="1" placeholder="30" />
+          <Label htmlFor="estimatedDays">预计天数（可选）</Label>
+          <Input
+            id="estimatedDays"
+            name="estimatedDays"
+            type="number"
+            min="1"
+            step="1"
+            placeholder="30"
+          />
         </div>
       </div>
 
@@ -132,7 +171,7 @@ export function JobForm() {
 
       <div>
         <Button type="submit" disabled={loading}>
-          {loading ? 'Posting…' : 'Post job'}
+          {loading ? '发布中…' : '发布需求'}
         </Button>
       </div>
     </form>

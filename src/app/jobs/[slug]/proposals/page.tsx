@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { ProposalReplyForm } from './proposals-reply-form';
+import { HireButton } from './hire-button';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,11 +32,13 @@ export default async function JobProposalsPage({
     select: {
       clientId: true,
       title: true,
+      contract: { select: { id: true } },
       client: { select: { clientProfile: { select: { companyName: true } } } },
       proposals: {
         orderBy: { createdAt: 'desc' },
         select: {
           id: true,
+          status: true,
           coverLetter: true,
           bidAmount: true,
           bidType: true,
@@ -71,15 +74,20 @@ export default async function JobProposalsPage({
     <div className="container max-w-3xl py-12">
       <p className="text-sm text-muted-foreground">{company}</p>
       <h1 className="text-3xl font-bold">{job.title}</h1>
-      <p className="mt-1 text-sm text-muted-foreground">
-        {proposals.length} application{proposals.length === 1 ? '' : 's'}
-      </p>
+      <p className="mt-1 text-sm text-muted-foreground">共 {proposals.length} 份投标</p>
+
+      {job.contract ? (
+        <p className="mt-4 text-sm">
+          已生成合同：
+          <Link href={`/contracts/${job.contract.id}`} className="text-primary hover:underline">
+            查看合同
+          </Link>
+        </p>
+      ) : null}
 
       {proposals.length === 0 ? (
         <Card className="mt-8">
-          <CardContent className="py-8 text-center text-muted-foreground">
-            No applications yet.
-          </CardContent>
+          <CardContent className="py-8 text-center text-muted-foreground">还没有投标。</CardContent>
         </Card>
       ) : (
         <div className="mt-8 space-y-6">
@@ -110,8 +118,8 @@ export default async function JobProposalsPage({
                   </div>
                   <Badge variant="outline">
                     {p.bidType === 'HOURLY'
-                      ? `${formatMoney(p.bidAmount, p.profile?.currency ?? 'USD')}/hr`
-                      : formatMoney(p.bidAmount, p.profile?.currency ?? 'USD')}
+                      ? `${formatMoney(p.bidAmount, p.profile?.currency ?? 'CNY', 'zh-CN')}/小时`
+                      : formatMoney(p.bidAmount, p.profile?.currency ?? 'CNY', 'zh-CN')}
                   </Badge>
                 </div>
               </CardHeader>
@@ -119,6 +127,9 @@ export default async function JobProposalsPage({
                 <p className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground">
                   {p.coverLetter}
                 </p>
+                {!job.contract && p.status !== 'REJECTED' && p.status !== 'WITHDRAWN' ? (
+                  <HireButton proposalId={p.id} />
+                ) : null}
                 <ProposalReplyForm proposalId={p.id} />
               </CardContent>
             </Card>

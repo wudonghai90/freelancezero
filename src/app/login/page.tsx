@@ -38,7 +38,7 @@ function LoginForm() {
     });
     setLoading(false);
     if (res?.error) {
-      setError('Invalid email or password');
+      setError('邮箱或密码不正确');
       return;
     }
     router.push(next);
@@ -59,51 +59,51 @@ function LoginForm() {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle className="text-2xl">Welcome back</CardTitle>
+        <CardTitle className="text-2xl">登录</CardTitle>
       </CardHeader>
       <CardContent>
         {linkExpired ? (
           <p className="mb-4 rounded-md border border-amber-500/40 bg-amber-500/10 p-3 text-sm">
-            That sign-in link has expired. Enter your email below and we&apos;ll send a fresh one.
+            登录链接已失效。请在下方输入邮箱，我们会重新发送。
           </p>
         ) : null}
         <form onSubmit={onSubmit} className="grid gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">邮箱</Label>
             <Input id="email" name="email" type="email" required autoComplete="email" />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">密码</Label>
             <Input id="password" name="password" type="password" required autoComplete="current-password" />
           </div>
           {error ? <p className="text-sm text-destructive">{error}</p> : null}
           <Button type="submit" disabled={loading}>
-            {loading ? 'Signing in…' : 'Sign in'}
+            {loading ? '登录中…' : '登录'}
           </Button>
         </form>
 
         {hasMagic || hasGoogle || hasGitHub ? (
           <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
-            <span className="h-px flex-1 bg-border" /> or <span className="h-px flex-1 bg-border" />
+            <span className="h-px flex-1 bg-border" /> 或 <span className="h-px flex-1 bg-border" />
           </div>
         ) : null}
 
         {hasMagic ? (
           magicSent ? (
             <p className="rounded-md bg-muted p-3 text-center text-sm text-muted-foreground">
-              Check your email for a sign-in link.
+              请查收邮件中的登录链接。
             </p>
           ) : (
             <form onSubmit={onMagicLink} className="grid gap-2">
               <Input
                 type="email"
-                placeholder="you@company.com"
+                placeholder="you@example.com"
                 value={magicEmail}
                 onChange={(e) => setMagicEmail(e.target.value)}
                 autoComplete="email"
               />
               <Button type="submit" variant="outline">
-                Email me a magic link
+                发送登录链接
               </Button>
             </form>
           )
@@ -116,7 +116,7 @@ function LoginForm() {
             className="mt-2 w-full"
             onClick={() => signIn('google', { callbackUrl: next })}
           >
-            Continue with Google
+使用 Google 登录
           </Button>
         ) : null}
         {hasGitHub ? (
@@ -126,14 +126,14 @@ function LoginForm() {
             className="mt-2 w-full"
             onClick={() => signIn('github', { callbackUrl: next })}
           >
-            Continue with GitHub
+使用 GitHub 登录
           </Button>
         ) : null}
 
         <p className="mt-4 text-center text-sm text-muted-foreground">
-          No account?{' '}
+          还没有账号？{' '}
           <Link href="/register" className="text-primary hover:underline">
-            Sign up free
+            免费注册
           </Link>
         </p>
       </CardContent>

@@ -56,7 +56,7 @@ export function NotificationsBell() {
   return (
     <DropdownMenu onOpenChange={handleOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Notifications" className="relative">
+        <Button variant="ghost" size="icon" aria-label="通知" className="relative">
           <Bell />
           {unread > 0 ? (
             <span className="absolute right-1 top-1 grid min-w-4 place-items-center rounded-full bg-primary px-1 text-[10px] font-bold leading-4 text-primary-foreground">
@@ -66,11 +66,11 @@ export function NotificationsBell() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-80">
-        <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+        <DropdownMenuLabel>通知</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {!data || data.items.length === 0 ? (
           <p className="px-2 py-4 text-center text-sm text-muted-foreground">
-            Nothing yet — activity shows up here.
+            暂无通知，有新动态会显示在这里。
           </p>
         ) : (
           data.items.map((n) => {
@@ -85,7 +85,7 @@ export function NotificationsBell() {
                     <p className="truncate text-xs text-muted-foreground">{n.body}</p>
                   ) : null}
                   <p className="text-xs text-muted-foreground">
-                    {new Date(n.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    {new Date(n.createdAt).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })}
                   </p>
                 </div>
               </div>

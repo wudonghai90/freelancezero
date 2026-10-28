@@ -9,7 +9,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { PollRefresh } from '@/components/poll-refresh';
 import { getRealtime } from '@/lib/adapters/realtime';
 
-export const metadata = { title: 'Messages' };
+export const metadata = { title: '消息' };
 export const dynamic = 'force-dynamic';
 
 const FREELANCER_ROLES = ['FREELANCER', 'AGENCY_OWNER', 'AGENCY_MEMBER'];
@@ -53,10 +53,10 @@ export default async function MessagesPage() {
   const threads = conversations.map((c) => {
     const other = c.participants.find((p) => p.userId !== me);
     const label = !other
-      ? 'Conversation'
+      ? '会话'
       : FREELANCER_ROLES.includes(other.user.role)
         ? displayName(other.user.name, other.user.showFullName)
-        : other.user.clientProfile?.companyName?.trim() || other.user.name?.trim() || 'Client';
+        : other.user.clientProfile?.companyName?.trim() || other.user.name?.trim() || '客户';
     return {
       id: c.id,
       title: c.title,
@@ -75,13 +75,13 @@ export default async function MessagesPage() {
 
       <div className="mb-8 flex items-center gap-3">
         <MessageSquare className="size-6 text-primary" />
-        <h1 className="text-3xl font-bold">Messages</h1>
+        <h1 className="text-3xl font-bold">消息</h1>
       </div>
 
       {threads.length === 0 ? (
         <Card>
           <CardContent className="py-10 text-center text-muted-foreground">
-            No conversations yet. They start when a client replies to a proposal.
+            还没有会话。客户回复投标后，会话会出现在这里。
           </CardContent>
         </Card>
       ) : (
@@ -98,7 +98,7 @@ export default async function MessagesPage() {
                     <div className="flex items-baseline justify-between gap-3">
                       <p className="truncate font-medium">{t.label}</p>
                       <span className="whitespace-nowrap text-xs text-muted-foreground">
-                        {t.at.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        {t.at.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })}
                       </span>
                     </div>
                     {t.title ? (

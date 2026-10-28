@@ -5,7 +5,7 @@ import { pageMetadata } from '@/lib/seo';
 export const metadata = pageMetadata({
   title: 'Privacy Policy',
   description:
-    'How Freelancezero collects, uses, and protects your personal data. We never sell your data, and you can export or delete it at any time.',
+    'How 自由工作平台 collects, uses, and protects your personal data. We never sell your data, and you can export or delete it at any time.',
   path: '/privacy',
   keywords: ['freelancezero privacy policy', 'freelance platform data protection'],
 });
@@ -19,9 +19,9 @@ export default function PrivacyPage() {
     >
       <Section heading="Who we are">
         <p>
-          Freelancezero (&ldquo;we&rdquo;, &ldquo;us&rdquo;) operates a zero-fee freelance
+          自由工作平台 (&ldquo;we&rdquo;, &ldquo;us&rdquo;) operates a zero-fee freelance
           marketplace. This policy explains what we do with personal data when you use the hosted
-          service at freelancezero.com. Freelancezero is also open source and self-hostable — if you
+          service at freelancezero.com. 自由工作平台 is also open source and self-hostable — if you
           are using someone else&rsquo;s instance, that operator is the data controller, not us.
         </p>
       </Section>

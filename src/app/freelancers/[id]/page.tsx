@@ -97,7 +97,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     p.bio?.replace(/\s+/g, ' ').slice(0, 155) ??
     `Hire ${p.publicName}${where} — ${p.headline ?? 'freelancer'}${
       skills.length ? `, skilled in ${skills.slice(0, 4).join(', ')}` : ''
-    }. Zero platform fees on Freelancezero.`;
+    }. Zero platform fees on 自由工作平台.`;
 
   return pageMetadata({
     title: `${p.publicName} — ${p.headline ?? 'Freelancer'}${where}`,
@@ -179,7 +179,7 @@ export default async function FreelancerProfilePage({
 
       <Button asChild variant="ghost" size="sm" className="mb-6">
         <Link href="/">
-          <ArrowLeft /> Freelancezero
+          <ArrowLeft /> 自由工作平台
         </Link>
       </Button>
 

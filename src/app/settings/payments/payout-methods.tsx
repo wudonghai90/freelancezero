@@ -2,18 +2,50 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import type { PaymentProvider } from '@prisma/client';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 
-type Provider = 'STRIPE_CONNECT' | 'PAYPAL' | 'WISE' | 'MANUAL' | 'CRYPTO_USDC';
+type Provider = PaymentProvider;
 
-const METHODS: { provider: Provider; label: string; desc: string; placeholder: string }[] = [
-  { provider: 'STRIPE_CONNECT', label: 'Stripe Connect', desc: 'Instant payouts to your bank or debit card.', placeholder: 'Account email' },
-  { provider: 'PAYPAL', label: 'PayPal', desc: 'Get paid to your PayPal balance worldwide.', placeholder: 'PayPal email' },
-  { provider: 'WISE', label: 'Wise', desc: 'Low-cost multi-currency transfers.', placeholder: 'Wise email' },
-  { provider: 'MANUAL', label: 'Bank transfer / invoice', desc: 'Arrange payment directly with the client.', placeholder: 'IBAN or note (optional)' },
+// 国内默认收款方式：支付宝、微信、银行卡。MANUAL 用于线下/对公转账记账。
+const METHODS: {
+  provider: Provider;
+  label: string;
+  desc: string;
+  placeholder: string;
+  needHolder: boolean;
+}[] = [
+  {
+    provider: 'ALIPAY',
+    label: '支付宝',
+    desc: '绑定支付宝账号，客户结算后直接到账。',
+    placeholder: '支付宝账号或绑定手机号',
+    needHolder: true,
+  },
+  {
+    provider: 'WECHAT_PAY',
+    label: '微信支付',
+    desc: '绑定微信号，适合小额与个人结算。',
+    placeholder: '微信号或绑定手机号',
+    needHolder: true,
+  },
+  {
+    provider: 'BANK_TRANSFER',
+    label: '银行卡转账',
+    desc: '填写本人银行卡，适合大额与对公结算。',
+    placeholder: '银行卡号',
+    needHolder: true,
+  },
+  {
+    provider: 'MANUAL',
+    label: '线下 / 发票结算',
+    desc: '与客户线下约定付款方式，平台仅记账。',
+    placeholder: '备注（可选）',
+    needHolder: true,
+  },
 ];
 
 export function PayoutMethods({
@@ -22,13 +54,15 @@ export function PayoutMethods({
   initialHolderName,
   isFreelancer,
 }: {
-  initialProvider: Provider | null;
+  initialProvider: string | null;
   initialDetail: string | null;
   initialHolderName: string | null;
   isFreelancer: boolean;
 }) {
   const router = useRouter();
-  const [connected, setConnected] = useState<Provider | null>(initialProvider);
+  const [connected, setConnected] = useState<Provider | null>(
+    (initialProvider as Provider | null) ?? null,
+  );
   const [detail, setDetail] = useState<string | null>(initialDetail);
   const [holderName, setHolderName] = useState<string | null>(initialHolderName);
   const [openFor, setOpenFor] = useState<Provider | null>(null);
@@ -38,7 +72,6 @@ export function PayoutMethods({
   const [error, setError] = useState<string | null>(null);
 
   function notifyChanged() {
-    // Let the global no-payout banner re-check immediately.
     window.dispatchEvent(new Event('payout:changed'));
     router.refresh();
   }
@@ -58,7 +91,7 @@ export function PayoutMethods({
     setBusy(false);
     if (!res.ok) {
       const body = await res.json().catch(() => null);
-      setError(body?.error?.message ?? 'Could not save. Try again.');
+      setError(body?.error?.message ?? '保存失败，请稍后重试');
       return;
     }
     setConnected(provider);
@@ -77,6 +110,7 @@ export function PayoutMethods({
     if (res.ok) {
       setConnected(null);
       setDetail(null);
+      setHolderName(null);
       notifyChanged();
     }
   }
@@ -93,7 +127,7 @@ export function PayoutMethods({
                   <p className="font-medium">{m.label}</p>
                   {isConnected ? (
                     <Badge variant="secondary" className="gap-1">
-                      <Check className="size-3" /> Connected
+                      <Check className="size-3" /> 已绑定
                     </Badge>
                   ) : null}
                 </div>
@@ -107,7 +141,7 @@ export function PayoutMethods({
               </div>
               {isConnected ? (
                 <Button variant="outline" size="sm" onClick={remove} disabled={busy}>
-                  Remove
+                  移除
                 </Button>
               ) : (
                 <Button
@@ -119,18 +153,18 @@ export function PayoutMethods({
                   }}
                   disabled={busy}
                 >
-                  {openFor === m.provider ? 'Cancel' : 'Connect'}
+                  {openFor === m.provider ? '取消' : '绑定'}
                 </Button>
               )}
             </div>
 
             {openFor === m.provider ? (
               <div className="mt-3 grid gap-2">
-                {m.provider === 'MANUAL' ? (
+                {m.needHolder ? (
                   <Input
                     value={holderInput}
                     onChange={(e) => setHolderInput(e.target.value)}
-                    placeholder="Account holder name (required)"
+                    placeholder="开户人真实姓名（必填）"
                     autoComplete="name"
                   />
                 ) : null}
@@ -142,7 +176,7 @@ export function PayoutMethods({
                     className="sm:flex-1"
                   />
                   <Button onClick={() => connect(m.provider)} disabled={busy}>
-                    {busy ? 'Saving…' : 'Save'}
+                    {busy ? '保存中…' : '保存'}
                   </Button>
                 </div>
               </div>
@@ -154,8 +188,8 @@ export function PayoutMethods({
 
       <p className="text-sm text-muted-foreground">
         {isFreelancer
-          ? 'Your clients pay you directly through the method you choose. Freelancezero never holds your money or takes a cut.'
-          : 'You pay talent directly through the method you choose. Freelancezero never holds funds or charges a platform fee.'}
+          ? '客户通过你选择的方式直接付款，平台不经手资金、不抽佣。'
+          : '你通过选择的方式直接付款给服务方，平台不经手资金、不抽佣。'}
       </p>
     </div>
   );

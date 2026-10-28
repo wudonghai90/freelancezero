@@ -4,7 +4,7 @@ import { pageMetadata } from '@/lib/seo';
 export const metadata = pageMetadata({
   title: 'Security',
   description:
-    'How Freelancezero protects your account and data: encryption in transit, hashed passwords, non-custodial payments, and a public vulnerability disclosure process.',
+    'How 自由工作平台 protects your account and data: encryption in transit, hashed passwords, non-custodial payments, and a public vulnerability disclosure process.',
   path: '/security',
   keywords: ['freelancezero security', 'freelance platform security', 'responsible disclosure'],
 });
@@ -13,7 +13,7 @@ export default function SecurityPage() {
   return (
     <LegalPage
       title="Security"
-      intro="Freelancezero is open source, which means our security posture is auditable by anyone. Here is how we protect accounts and data — and how to report a problem."
+      intro="自由工作平台 is open source, which means our security posture is auditable by anyone. Here is how we protect accounts and data — and how to report a problem."
       updated="August 2, 2026"
     >
       <Section heading="Account security">
@@ -41,7 +41,7 @@ export default function SecurityPage() {
 
       <Section heading="Payments are non-custodial">
         <p>
-          Freelancezero never holds your money and never takes a commission. Funds move directly
+          自由工作平台 never holds your money and never takes a commission. Funds move directly
           between client and freelancer through the provider they choose. We store a display-only
           identifier for your chosen payout method (for example a PayPal email) — never full banking
           credentials or card numbers. That means there is no pot of user funds on our side to steal.

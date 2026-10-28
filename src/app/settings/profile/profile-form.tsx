@@ -32,7 +32,7 @@ export type ProfileInitial = {
 };
 
 const LINKS: { name: keyof ProfileInitial; label: string; placeholder: string }[] = [
-  { name: 'websiteUrl', label: 'Website', placeholder: 'https://yoursite.com' },
+  { name: 'websiteUrl', label: '个人网站', placeholder: 'https://yoursite.com' },
   { name: 'linkedinUrl', label: 'LinkedIn', placeholder: 'linkedin.com/in/you' },
   { name: 'githubUrl', label: 'GitHub', placeholder: 'github.com/you' },
   { name: 'stackoverflowUrl', label: 'Stack Overflow', placeholder: 'stackoverflow.com/users/…' },
@@ -90,7 +90,7 @@ export function ProfileForm({ initial }: { initial: ProfileInitial }) {
       if (!prefRes.ok) {
         const b = await prefRes.json().catch(() => null);
         setBusy(false);
-        setError(b?.error?.message ?? 'Could not save your name');
+        setError(b?.error?.message ?? '姓名保存失败');
         return;
       }
     }
@@ -108,7 +108,7 @@ export function ProfileForm({ initial }: { initial: ProfileInitial }) {
       const flat = b?.error?.details?.fieldErrors as Record<string, string[]> | undefined;
       const first = flat ? Object.entries(flat)[0] : undefined;
       setFieldError(first ? `${first[0]}: ${first[1]?.[0]}` : null);
-      setError(first ? null : (b?.error?.message ?? 'Could not save. Check the fields.'));
+      setError(first ? null : (b?.error?.message ?? '保存失败，请检查填写内容。'));
       return;
     }
     setSaved(true);
@@ -120,11 +120,11 @@ export function ProfileForm({ initial }: { initial: ProfileInitial }) {
     <form onSubmit={onSubmit} className="grid gap-6">
       <section className="grid gap-4">
         <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          Basics
+          基本信息
         </h3>
 
         <div className="grid gap-2">
-          <Label htmlFor="name">Full name</Label>
+          <Label htmlFor="name">姓名</Label>
           <Input
             id="name"
             name="name"
@@ -136,29 +136,29 @@ export function ProfileForm({ initial }: { initial: ProfileInitial }) {
           />
           {initial.nameLocked ? (
             <p className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-              <Lock className="size-3" /> Locked after approval — contact support to correct it.
+              <Lock className="size-3" /> 账号审核通过后姓名已锁定，如需更正请联系客服。
             </p>
           ) : (
             <p className="text-xs text-muted-foreground">
-              This locks once your account is approved, so get it right now.
+              账号审核通过后姓名将锁定，请确认无误。
             </p>
           )}
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="headline">Headline</Label>
+          <Label htmlFor="headline">个人标题</Label>
           <Input
             id="headline"
             name="headline"
             defaultValue={initial.headline}
-            placeholder="Senior Full-Stack Engineer · React & Node"
+            placeholder="资深全栈工程师 · React 与 Node"
             maxLength={120}
             required
           />
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="bio">Bio</Label>
+          <Label htmlFor="bio">个人简介</Label>
           <textarea
             id="bio"
             name="bio"
@@ -166,44 +166,44 @@ export function ProfileForm({ initial }: { initial: ProfileInitial }) {
             value={bio}
             onChange={(e) => setBio(e.target.value)}
             maxLength={BIO_MAX}
-            placeholder="What you do, who you do it for, and the results you get. Concrete outcomes beat adjectives."
+            placeholder="介绍你做什么、服务哪些客户、能带来什么结果。具体成果比形容词更有说服力。"
             className="w-full rounded-md border bg-background p-3 text-sm"
           />
           <p
             className={`text-xs ${bioTooShort ? 'text-destructive' : 'text-muted-foreground'}`}
           >
             {bio.trim().length}/{BIO_MAX}
-            {bioTooShort ? ` — at least ${BIO_MIN} characters` : ` (minimum ${BIO_MIN})`}
+            {bioTooShort ? ` — 至少 ${BIO_MIN} 个字符` : `（最少 ${BIO_MIN} 个字符）`}
           </p>
         </div>
       </section>
 
       <section className="grid gap-4 border-t pt-6">
         <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          Availability &amp; rate
+          可用性与报价
         </h3>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="grid gap-2">
             <Label htmlFor="location">
-              Location <span className="text-destructive">*</span>
+              所在地 <span className="text-destructive">*</span>
             </Label>
             <Input
               id="location"
               name="location"
               defaultValue={initial.location}
-              placeholder="Amsterdam, Netherlands"
+              placeholder="上海，中国"
               maxLength={120}
               required
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="timezone">Timezone</Label>
+            <Label htmlFor="timezone">时区</Label>
             <Input
               id="timezone"
               name="timezone"
               defaultValue={initial.timezone}
-              placeholder="CET (UTC+1)"
+              placeholder="中国标准时间（UTC+8）"
               maxLength={60}
             />
           </div>
@@ -211,18 +211,18 @@ export function ProfileForm({ initial }: { initial: ProfileInitial }) {
 
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="grid gap-2">
-            <Label htmlFor="hourlyRate">Hourly rate (USD)</Label>
+            <Label htmlFor="hourlyRate">时薪（元）</Label>
             <Input
               id="hourlyRate"
               name="hourlyRate"
               type="number"
               min="1"
               defaultValue={initial.hourlyRate ? Math.round(initial.hourlyRate / 100) : ''}
-              placeholder="85"
+              placeholder="300"
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="hoursPerWeek">Hours / week</Label>
+            <Label htmlFor="hoursPerWeek">每周可投入小时</Label>
             <Input
               id="hoursPerWeek"
               name="hoursPerWeek"
@@ -234,7 +234,7 @@ export function ProfileForm({ initial }: { initial: ProfileInitial }) {
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="yearsExperience">Years experience</Label>
+            <Label htmlFor="yearsExperience">工作年限</Label>
             <Input
               id="yearsExperience"
               name="yearsExperience"
@@ -248,16 +248,16 @@ export function ProfileForm({ initial }: { initial: ProfileInitial }) {
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="availability">Availability</Label>
+          <Label htmlFor="availability">当前状态</Label>
           <select
             id="availability"
             value={availability}
             onChange={(e) => setAvailability(e.target.value as Availability)}
             className="h-10 rounded-md border bg-background px-3 text-sm"
           >
-            <option value="OPEN_TO_WORK">Open to work</option>
-            <option value="OPEN_TO_OFFERS">Open to offers</option>
-            <option value="NOT_AVAILABLE">Not available</option>
+            <option value="OPEN_TO_WORK">正在接单</option>
+            <option value="OPEN_TO_OFFERS">可接受邀请</option>
+            <option value="NOT_AVAILABLE">暂不接单</option>
           </select>
         </div>
       </section>
@@ -265,10 +265,10 @@ export function ProfileForm({ initial }: { initial: ProfileInitial }) {
       <section className="grid gap-4 border-t pt-6">
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-            Professional links
+            专业链接
           </h3>
           <p className="mt-1 text-xs text-muted-foreground">
-            Each field only accepts URLs from that site.
+            每个输入框只接受对应网站的链接。
           </p>
         </div>
 
@@ -292,9 +292,9 @@ export function ProfileForm({ initial }: { initial: ProfileInitial }) {
 
       <div className="flex items-center gap-3 border-t pt-6">
         <Button type="submit" disabled={busy}>
-          {busy ? 'Saving…' : 'Save profile'}
+          {busy ? '保存中…' : '保存资料'}
         </Button>
-        {saved ? <span className="text-sm text-green-600">Saved ✓</span> : null}
+        {saved ? <span className="text-sm text-green-600">已保存</span> : null}
       </div>
     </form>
   );

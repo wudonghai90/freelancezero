@@ -8,7 +8,7 @@ export const POSTS_H2: Post[] = [
     excerpt:
       'Choosing how you get paid is a pricing decision. Here is what each option actually costs, especially across borders.',
     date: '2026-04-07',
-    author: 'Freelancezero Team',
+    author: '自由工作平台 Team',
     category: 'Money',
     keywords: [
       'how to get paid freelancer',
@@ -84,7 +84,7 @@ Fast and cheap, useful where banking is genuinely difficult. Adds volatility han
 
 Whatever processor you choose, check what sits on top of it. Marketplace commission stacks with payment fees: 10% platform + 3% processing is 13% before tax.
 
-[Freelancezero](/settings/payments) is non-custodial — you connect your own Stripe, PayPal, Wise, or bank details and clients pay you directly. The platform adds **0%**, so the only cost is your processor's.`,
+[自由工作平台](/settings/payments) is non-custodial — you connect your own Stripe, PayPal, Wise, or bank details and clients pay you directly. The platform adds **0%**, so the only cost is your processor's.`,
   },
 
   {
@@ -93,7 +93,7 @@ Whatever processor you choose, check what sits on top of it. Marketplace commiss
     excerpt:
       'Most freelance disputes trace back to something nobody wrote down. Here are the nine clauses that prevent almost all of them.',
     date: '2026-04-21',
-    author: 'Freelancezero Team',
+    author: '自由工作平台 Team',
     category: 'Guides',
     keywords: [
       'freelance contract template',
@@ -183,7 +183,7 @@ Without this, a $3,000 project theoretically exposes you to unlimited damages.
 
 > The contract is not there to win a lawsuit. It is there so that six weeks in, when someone says "I assumed that was included", you can both look at the same paragraph.
 
-On [Freelancezero](/register), the contract is directly between you and your client — the platform is not a party to it, does not hold your money, and takes 0%.`,
+On [自由工作平台](/register), the contract is directly between you and your client — the platform is not a party to it, does not hold your money, and takes 0%.`,
   },
 
   {
@@ -192,7 +192,7 @@ On [Freelancezero](/register), the contract is directly between you and your cli
     excerpt:
       'Nobody hires you because your portfolio is pretty. They hire you because they recognise their problem in it. Here is how to build for that.',
     date: '2026-05-06',
-    author: 'Freelancezero Team',
+    author: '自由工作平台 Team',
     category: 'Growth',
     keywords: [
       'freelance portfolio',
@@ -254,7 +254,7 @@ The platform matters less than the content, but:
 
 - **Your own domain** — always. You control it and it accrues SEO value.
 - One page per case study, so you can link a client directly to the most relevant one.
-- **A marketplace profile** where your prospects search. On [Freelancezero](/register) your profile is public and indexable at no cost.
+- **A marketplace profile** where your prospects search. On [自由工作平台](/register) your profile is public and indexable at no cost.
 
 Send the *relevant* case study, not the homepage. A prospect with a checkout problem should land on the checkout case study.
 
@@ -279,7 +279,7 @@ Update it after every project, while the numbers are still fresh — nobody reme
     excerpt:
       'Beyond the big marketplaces: job boards, niche communities, and channels that actually produce paid remote work.',
     date: '2026-05-19',
-    author: 'Freelancezero Team',
+    author: '自由工作平台 Team',
     category: 'Guides',
     keywords: [
       'remote freelance jobs',
@@ -292,7 +292,7 @@ Update it after every project, while the numbers are still fresh — nobody reme
 
 ## Zero-fee marketplaces
 
-**[Freelancezero](/jobs)** — 0% commission, free to apply, open source. Our own, so judge accordingly; the structural claim is that applying costs nothing and no commission is deducted.
+**[自由工作平台](/jobs)** — 0% commission, free to apply, open source. Our own, so judge accordingly; the structural claim is that applying costs nothing and no commission is deducted.
 
 [Contra](https://contra.com) — commission-free for freelancers, strong in design and creative.
 
@@ -373,7 +373,7 @@ Note what that implies: marketplaces are the *smallest* slice, but where most pe
 
 > Marketplaces are how you start. Referrals and repeat work are how you make a living.
 
-The strategic move is to use marketplaces to acquire clients, then keep those relationships somewhere that does not charge you commission forever. On [Freelancezero](/register) applying is free and there is no cut on what you earn.`,
+The strategic move is to use marketplaces to acquire clients, then keep those relationships somewhere that does not charge you commission forever. On [自由工作平台](/register) applying is free and there is no cut on what you earn.`,
   },
 
   {
@@ -382,7 +382,7 @@ The strategic move is to use marketplaces to acquire clients, then keep those re
     excerpt:
       'The seven scams that target freelancers, the warning signs in the first message, and the rules that make you nearly unscammable.',
     date: '2026-06-03',
-    author: 'Freelancezero Team',
+    author: '自由工作平台 Team',
     category: 'Guides',
     keywords: [
       'freelance scams',
@@ -480,7 +480,7 @@ One of these can be innocent. Three together is a pattern.
 
 > The goal is not to never get scammed. It is to make sure that when it happens, you lose one milestone rather than three months of work.
 
-On [Freelancezero](/register), contracts and payments are directly between you and your client — which means the deposit and milestone discipline above is not optional best practice, it is your protection. Use it.`,
+On [自由工作平台](/register), contracts and payments are directly between you and your client — which means the deposit and milestone discipline above is not optional best practice, it is your protection. Use it.`,
   },
 
   {
@@ -489,7 +489,7 @@ On [Freelancezero](/register), contracts and payments are directly between you a
     excerpt:
       'The tax basics every freelancer needs: what percentage to reserve, what you can deduct, and the quarterly rhythm that avoids nasty surprises.',
     date: '2026-06-18',
-    author: 'Freelancezero Team',
+    author: '自由工作平台 Team',
     category: 'Money',
     keywords: [
       'freelancer taxes',
@@ -582,16 +582,16 @@ Commission is a real cost that reduces both your income and your tax bill — bu
 
 > Deductions soften costs. They never make a cost free. The cheapest fee is the one you do not pay.
 
-On [Freelancezero](/register) there is no commission, so there is nothing to deduct — the money simply stays with you. Track your income carefully either way; nobody sends you a summary at year end when you are the business.`,
+On [自由工作平台](/register) there is no commission, so there is nothing to deduct — the money simply stays with you. Track your income carefully either way; nobody sends you a summary at year end when you are the business.`,
   },
 
   {
     slug: 'self-host-freelance-marketplace',
     title: 'Self-Hosting Your Own Freelance Marketplace: A Practical Guide',
     excerpt:
-      'Freelancezero is open source. Here is how to run your own instance — for an agency, a community, or a niche marketplace of your own.',
+      '自由工作平台 is open source. Here is how to run your own instance — for an agency, a community, or a niche marketplace of your own.',
     date: '2026-07-08',
-    author: 'Freelancezero Team',
+    author: '自由工作平台 Team',
     category: 'Product',
     keywords: [
       'self-hosted freelance marketplace',
@@ -600,7 +600,7 @@ On [Freelancezero](/register) there is no commission, so there is nothing to ded
       'freelancezero self hosting',
     ],
     readingMinutes: 8,
-    body: `Freelancezero is MIT-licensed and self-hostable. This guide covers who should run their own instance, what it takes, and the decisions that matter.
+    body: `自由工作平台 is MIT-licensed and self-hostable. This guide covers who should run their own instance, what it takes, and the decisions that matter.
 
 ## Why self-host
 
@@ -695,7 +695,7 @@ The code is on [GitHub](https://github.com/freelancezero/freelancezero) under th
     excerpt:
       'The script, the timing, and the arithmetic — including why losing a few clients to a rate rise usually means you earn more.',
     date: '2026-07-28',
-    author: 'Freelancezero Team',
+    author: '自由工作平台 Team',
     category: 'Growth',
     keywords: [
       'raise freelance rates',
@@ -796,6 +796,6 @@ Beyond the number on the invoice, your take-home rises when you:
 
 A freelancer billing $80,000 on a 10% platform who moves half their clients to a zero-fee one gains $4,000 a year — comparable to a 5% rate rise, and nobody has to say yes.
 
-[Freelancezero](/register) takes 0% commission, permanently. Point your repeat clients there, then raise your rate on top.`,
+[自由工作平台](/register) takes 0% commission, permanently. Point your repeat clients there, then raise your rate on top.`,
   },
 ];

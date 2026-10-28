@@ -7,7 +7,7 @@ import { pageMetadata } from '@/lib/seo';
 export const metadata = pageMetadata({
   title: 'System Status',
   description:
-    'Live operational status for Freelancezero — API, database, email delivery, and background jobs, with 90-day uptime history.',
+    'Live operational status for 自由工作平台 — API, database, email delivery, and background jobs, with 90-day uptime history.',
   path: '/status',
   keywords: ['freelancezero status', 'freelancezero uptime'],
 });

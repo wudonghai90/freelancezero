@@ -6,7 +6,16 @@ import { isValidIban, looksLikeIban } from '@/lib/validations/iban';
 import { sendMail } from '@/lib/mail/send';
 
 const setSchema = z.object({
-  provider: z.enum(['STRIPE_CONNECT', 'PAYPAL', 'WISE', 'MANUAL', 'CRYPTO_USDC']),
+  provider: z.enum([
+    'ALIPAY',
+    'WECHAT_PAY',
+    'BANK_TRANSFER',
+    'MANUAL',
+    'STRIPE_CONNECT',
+    'PAYPAL',
+    'WISE',
+    'CRYPTO_USDC',
+  ]),
   // Display-only identifier (PayPal email, IBAN, wallet, …). Never a secret.
   detail: z.string().trim().max(200).optional(),
   // Account holder name — required for bank transfers (a wire needs both).
@@ -14,22 +23,29 @@ const setSchema = z.object({
 });
 
 /**
- * Per-provider sanity checks. This is NOT gateway verification (Freelancezero
+ * Per-provider sanity checks. This is NOT gateway verification (自由工作平台
  * is non-custodial — money never flows through us), but typos in payout
  * details cost people real money, so the obvious mistakes are caught here.
  */
 function validateDetail(provider: string, detail: string | undefined, holderName: string | undefined) {
+  if (provider === 'ALIPAY' || provider === 'WECHAT_PAY') {
+    if (!holderName) return '请填写实名姓名';
+  }
+  if (provider === 'BANK_TRANSFER') {
+    if (!holderName) return '请填写开户人真实姓名';
+    if (detail && !/^[0-9 ]{12,30}$/.test(detail)) return '请填写有效的银行卡号';
+  }
   if (provider === 'MANUAL') {
-    if (!holderName) return 'Account holder name is required for bank transfers';
+    if (!holderName) return '请填写开户人真实姓名';
     if (detail && looksLikeIban(detail) && !isValidIban(detail)) {
-      return 'That IBAN fails its checksum — please double-check it';
+      return '该 IBAN 校验未通过，请仔细核对';
     }
   }
   if (provider === 'PAYPAL' && detail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(detail)) {
-    return 'Enter a valid PayPal email address';
+    return '请输入有效的 PayPal 邮箱地址';
   }
   if (provider === 'CRYPTO_USDC' && detail && !/^0x[a-fA-F0-9]{40}$/.test(detail)) {
-    return 'Enter a valid EVM wallet address (0x…)';
+    return '请输入有效的 EVM 钱包地址（0x…）';
   }
   return null;
 }
@@ -76,7 +92,7 @@ export function POST(req: Request) {
         session.user.email,
         'Your payout method was updated',
         `Hi ${session.user.name ?? 'there'},\n\n` +
-          `The payout method on your Freelancezero account was set to ${provider.toLowerCase().replace('_', ' ')}.\n\n` +
+          `The payout method on your 自由工作平台 account was set to ${provider.toLowerCase().replace('_', ' ')}.\n\n` +
           `If you didn't make this change, secure your account immediately: [Account settings](${process.env.NEXT_PUBLIC_APP_URL}/settings/payments)`,
       );
     }

@@ -12,14 +12,14 @@ import { sendMail } from '@/lib/mail/send';
 export function POST(req: Request) {
   return handle(async () => {
     const adapter = getIdentityAdapter();
-    if (!adapter.configured) return fail('Identity verification is not enabled', 503);
+    if (!adapter.configured) return fail('未启用实名认证', 503);
 
     const raw = await req.text();
     let payload: unknown;
     try {
       payload = JSON.parse(raw);
     } catch {
-      return fail('Invalid payload', 400);
+      return fail('请求数据无效', 400);
     }
 
     const result = adapter.parseWebhook(payload);

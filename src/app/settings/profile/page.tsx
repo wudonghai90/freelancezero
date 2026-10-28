@@ -9,7 +9,7 @@ import { AvatarUpload } from '@/components/avatar-upload';
 import { ProfileForm } from './profile-form';
 import { CompanyForm } from './company-form';
 
-export const metadata = { title: 'Public profile' };
+export const metadata = { title: '公开主页' };
 export const dynamic = 'force-dynamic';
 
 const FREELANCER_ROLES = ['FREELANCER', 'AGENCY_OWNER', 'AGENCY_MEMBER'];
@@ -60,30 +60,30 @@ export default async function ProfileSettingsPage() {
     <div className="container max-w-2xl py-12">
       <Button asChild variant="ghost" size="sm" className="mb-6">
         <Link href="/settings">
-          <ArrowLeft /> Settings
+          <ArrowLeft /> 设置
         </Link>
       </Button>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-3xl font-bold">{isFreelancer ? 'Public profile' : 'Your identity'}</h1>
+        <h1 className="text-3xl font-bold">{isFreelancer ? '公开主页' : '你的信息'}</h1>
         {isFreelancer && p?.id ? (
           <Button asChild variant="outline" size="sm">
             {/* Opens in a new tab so editing is not interrupted. */}
             <a href={`/freelancers/${p.id}`} target="_blank" rel="noopener noreferrer">
-              View public profile <ExternalLink />
+              查看公开主页 <ExternalLink />
             </a>
           </Button>
         ) : null}
       </div>
       <p className="mt-1 mb-8 text-muted-foreground">
         {isFreelancer
-          ? 'This is what clients see when they find you.'
-          : 'This is how you appear to freelancers on your postings and in messages.'}
+          ? '客户找到你时看到的就是这些信息。'
+          : '服务方在需求和消息中看到的就是这些信息。'}
       </p>
 
       <Card className="mb-4">
         <CardHeader>
-          <CardTitle>Photo</CardTitle>
+          <CardTitle>头像</CardTitle>
         </CardHeader>
         <CardContent>
           <AvatarUpload image={user.image} name={user.name} email={user.email} />
@@ -92,7 +92,7 @@ export default async function ProfileSettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Details</CardTitle>
+          <CardTitle>详细资料</CardTitle>
         </CardHeader>
         <CardContent>
           {isFreelancer ? (

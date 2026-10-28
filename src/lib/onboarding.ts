@@ -50,19 +50,19 @@ export async function getOnboarding(userId: string, role: string) {
 
   const isFreelancer = FREELANCER_ROLES.includes(role);
   const steps: OnboardingStep[] = [
-    { id: 'account', label: 'Create account', done: true },
-    { id: 'email', label: 'Confirm email', done: !!user?.emailVerified },
-    { id: 'photo', label: 'Add profile photo', done: !!user?.image },
+    { id: 'account', label: '创建账号', done: true },
+    { id: 'email', label: '验证邮箱', done: !!user?.emailVerified },
+    { id: 'photo', label: '上传头像', done: !!user?.image },
     isFreelancer
       ? {
           id: 'profile',
-          label: 'Your basics',
+          label: '基本资料',
           // Location is required: clients filter on it, so an incomplete profile
           // is invisible to exactly the people meant to find it.
           done: !!user?.freelancerProfile?.headline && !!user?.freelancerProfile?.location,
         }
-      : { id: 'payout', label: 'Add payment method', done: !!user?.payoutProvider },
-    { id: 'approval', label: 'Approval', done: !!user?.approvedAt },
+      : { id: 'payout', label: '添加付款方式', done: !!user?.payoutProvider },
+    { id: 'approval', label: '审核通过', done: !!user?.approvedAt },
   ];
 
   // Approval is the terminal gate, not just another checkbox: a human has

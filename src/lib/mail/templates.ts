@@ -10,9 +10,9 @@ export interface EmailContent {
   text: string;
 }
 
-const BRAND = 'Freelancezero';
+const BRAND = '自由工作平台';
 // Physical address is required by CAN-SPAM on the recruiter (cold) email.
-const POSTAL = process.env.MAIL_POSTAL_ADDRESS ?? 'Freelancezero — update MAIL_POSTAL_ADDRESS';
+const POSTAL = process.env.MAIL_POSTAL_ADDRESS ?? '自由工作平台 — update MAIL_POSTAL_ADDRESS';
 
 function layout(bodyHtml: string, footerHtml: string): string {
   return `<div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;max-width:520px;margin:0 auto;color:#1a1a1a;line-height:1.5">

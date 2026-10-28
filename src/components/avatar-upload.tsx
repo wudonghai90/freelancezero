@@ -41,7 +41,7 @@ export function AvatarUpload({
 
     if (!res.ok) {
       const body = await res.json().catch(() => null);
-      setError(body?.error?.message ?? 'Upload failed — try another image');
+      setError(body?.error?.message ?? '上传失败，请换一张图片试试');
       setPreview(null);
       return;
     }
@@ -72,9 +72,9 @@ export function AvatarUpload({
           disabled={busy}
           onClick={() => inputRef.current?.click()}
         >
-          <Camera /> {busy ? 'Uploading…' : image ? 'Change photo' : 'Add photo'}
+          <Camera /> {busy ? '上传中…' : image ? '更换头像' : '添加头像'}
         </Button>
-        <p className="mt-1 text-xs text-muted-foreground">PNG, JPG or WebP, up to 2 MB.</p>
+        <p className="mt-1 text-xs text-muted-foreground">支持 PNG、JPG、WebP，最大 2 MB。</p>
         {error ? <p className="mt-1 text-xs text-destructive">{error}</p> : null}
       </div>
     </div>

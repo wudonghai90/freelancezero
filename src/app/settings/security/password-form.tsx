@@ -19,7 +19,7 @@ export function PasswordForm({ hasPassword }: { hasPassword: boolean }) {
     const confirm = String(form.get('confirmPassword') ?? '');
 
     if (newPassword !== confirm) {
-      setError('New passwords do not match');
+      setError('两次输入的新密码不一致');
       return;
     }
 
@@ -37,7 +37,7 @@ export function PasswordForm({ hasPassword }: { hasPassword: boolean }) {
     if (!res.ok) {
       const body = await res.json().catch(() => null);
       const details = body?.error?.details?.fieldErrors?.newPassword?.[0];
-      setError(details ?? body?.error?.message ?? 'Could not update your password');
+      setError(details ?? body?.error?.message ?? '密码更新失败');
       return;
     }
     setDone(true);
@@ -48,7 +48,7 @@ export function PasswordForm({ hasPassword }: { hasPassword: boolean }) {
     <form onSubmit={onSubmit} className="grid gap-4">
       {hasPassword ? (
         <div className="grid gap-2">
-          <Label htmlFor="currentPassword">Current password</Label>
+          <Label htmlFor="currentPassword">当前密码</Label>
           <Input
             id="currentPassword"
             name="currentPassword"
@@ -59,13 +59,12 @@ export function PasswordForm({ hasPassword }: { hasPassword: boolean }) {
         </div>
       ) : (
         <p className="text-sm text-muted-foreground">
-          Your account signs in with a magic link or social login. Set a password to also sign in
-          with one.
+          当前账号使用登录链接或第三方登录。设置密码后也可以用密码登录。
         </p>
       )}
 
       <div className="grid gap-2">
-        <Label htmlFor="newPassword">New password</Label>
+        <Label htmlFor="newPassword">新密码</Label>
         <Input
           id="newPassword"
           name="newPassword"
@@ -74,12 +73,12 @@ export function PasswordForm({ hasPassword }: { hasPassword: boolean }) {
           required
         />
         <p className="text-xs text-muted-foreground">
-          At least 8 characters, with an uppercase letter, a lowercase letter, and a number.
+          至少 8 位，包含大小写字母和数字。
         </p>
       </div>
 
       <div className="grid gap-2">
-        <Label htmlFor="confirmPassword">Confirm new password</Label>
+        <Label htmlFor="confirmPassword">确认新密码</Label>
         <Input
           id="confirmPassword"
           name="confirmPassword"
@@ -90,11 +89,11 @@ export function PasswordForm({ hasPassword }: { hasPassword: boolean }) {
       </div>
 
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
-      {done ? <p className="text-sm text-green-600">Password updated ✓</p> : null}
+      {done ? <p className="text-sm text-green-600">密码已更新</p> : null}
 
       <div>
         <Button type="submit" disabled={busy}>
-          {busy ? 'Saving…' : hasPassword ? 'Change password' : 'Set password'}
+          {busy ? '保存中…' : hasPassword ? '修改密码' : '设置密码'}
         </Button>
       </div>
     </form>

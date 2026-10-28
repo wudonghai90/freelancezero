@@ -15,7 +15,7 @@ import { OnboardingSteps } from '@/components/onboarding-steps';
 import { getOnboarding } from '@/lib/onboarding';
 import { missingItems } from '@/lib/profile-completeness';
 
-export const metadata = { title: 'Dashboard' };
+export const metadata = { title: '工作台 — OPC' };
 export const dynamic = 'force-dynamic';
 
 const FREELANCER_ROLES = ['FREELANCER', 'AGENCY_OWNER', 'AGENCY_MEMBER'];
@@ -23,6 +23,22 @@ const FREELANCER_ROLES = ['FREELANCER', 'AGENCY_OWNER', 'AGENCY_MEMBER'];
 const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'outline'> = {
   SUBMITTED: 'secondary', SHORTLISTED: 'default', ACCEPTED: 'default',
   REJECTED: 'outline', WITHDRAWN: 'outline',
+};
+
+const PROPOSAL_STATUS_LABEL: Record<string, string> = {
+  SUBMITTED: '已投递',
+  SHORTLISTED: '已入围',
+  ACCEPTED: '已录用',
+  REJECTED: '未录用',
+  WITHDRAWN: '已撤回',
+};
+
+const JOB_STATUS_LABEL: Record<string, string> = {
+  DRAFT: '草稿',
+  OPEN: '招募中',
+  IN_PROGRESS: '进行中',
+  CLOSED: '已关闭',
+  CANCELLED: '已取消',
 };
 
 export default async function DashboardPage() {
@@ -63,33 +79,33 @@ export default async function DashboardPage() {
 
   const stats = isFreelancer
     ? [
-        { label: 'Proposals sent', value: proposalsSent, icon: FileText },
-        { label: 'Active contracts', value: activeContracts, icon: FileSignature },
-        { label: 'Lifetime earned', value: formatMoney(money, 'USD'), icon: Wallet },
-        { label: 'Reviews', value: reviews, icon: Star },
+        { label: '已投递', value: proposalsSent, icon: FileText },
+        { label: '进行中的合同', value: activeContracts, icon: FileSignature },
+        { label: '累计收入', value: formatMoney(money, 'CNY'), icon: Wallet },
+        { label: '评价', value: reviews, icon: Star },
       ]
     : [
-        { label: 'Jobs posted', value: jobsPosted, icon: Briefcase },
-        { label: 'Total applicants', value: applicantsTotal, icon: FileText },
-        { label: 'Active contracts', value: activeContracts, icon: FileSignature },
-        { label: 'Lifetime paid', value: formatMoney(money, 'USD'), icon: Wallet },
+        { label: '已发布需求', value: jobsPosted, icon: Briefcase },
+        { label: '收到投标', value: applicantsTotal, icon: FileText },
+        { label: '进行中的合同', value: activeContracts, icon: FileSignature },
+        { label: '累计支出', value: formatMoney(money, 'CNY'), icon: Wallet },
       ];
 
   return (
     <div className="container py-12">
       <div className="mb-2 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <h1 className="text-3xl font-bold">工作台</h1>
           <Badge variant="secondary">{session.user.role.toLowerCase().replace('_', ' ')}</Badge>
         </div>
         <Button asChild>
           <Link href={isFreelancer ? '/jobs' : '/jobs/new'}>
-            {isFreelancer ? <Search /> : <Plus />} {isFreelancer ? 'Find work' : 'Post a job'}
+            {isFreelancer ? <Search /> : <Plus />} {isFreelancer ? '去接单' : '发布需求'}
           </Link>
         </Button>
       </div>
       <p className="mb-8 text-muted-foreground">
-        Welcome back, {session.user.name ?? session.user.email}.
+        欢迎回来，{session.user.name ?? session.user.email}。
       </p>
 
       {session.user.role !== 'ADMIN' ? (
@@ -148,11 +164,11 @@ async function ClientJobs({ userId }: { userId: string }) {
   return (
     <section>
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Your postings</h2>
-        <Button asChild variant="ghost" size="sm"><Link href="/jobs/new"><Plus /> New</Link></Button>
+        <h2 className="text-xl font-semibold">我的需求</h2>
+        <Button asChild variant="ghost" size="sm"><Link href="/jobs/new"><Plus /> 发布</Link></Button>
       </div>
       {jobs.length === 0 ? (
-        <EmptyState text="You haven’t posted a job yet." cta="Post your first job" href="/jobs/new" icon={Plus} />
+        <EmptyState text="还没有发布需求。" cta="发布第一个需求" href="/jobs/new" icon={Plus} />
       ) : (
         <div className="grid gap-3">
           {jobs.map((job) => (
@@ -163,14 +179,14 @@ async function ClientJobs({ userId }: { userId: string }) {
                     <p className="truncate font-medium">{job.title}</p>
                     <p className="text-sm text-muted-foreground">
                       {job.budgetType === 'FIXED'
-                        ? `${formatMoney(job.budgetMax ?? job.budgetMin ?? 0, job.currency)} fixed`
-                        : `${formatMoney(job.budgetMin ?? 0, job.currency)}–${formatMoney(job.budgetMax ?? 0, job.currency)}/hr`}
+                        ? `${formatMoney(job.budgetMax ?? job.budgetMin ?? 0, job.currency)} 固定价`
+                        : `${formatMoney(job.budgetMin ?? 0, job.currency)}–${formatMoney(job.budgetMax ?? 0, job.currency)}/小时`}
                     </p>
                   </div>
                   <div className="flex items-center gap-3 whitespace-nowrap">
-                    <Badge variant="outline">{job.status.toLowerCase().replace('_', ' ')}</Badge>
+                    <Badge variant="outline">{JOB_STATUS_LABEL[job.status] ?? job.status}</Badge>
                     <span className="text-sm font-medium">
-                      {job._count.proposals} applicant{job._count.proposals === 1 ? '' : 's'}
+                      {job._count.proposals} 份投标
                     </span>
                   </div>
                 </CardContent>
@@ -197,11 +213,11 @@ async function FreelancerProposals({ userId }: { userId: string }) {
   return (
     <section>
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Your proposals</h2>
-        <Button asChild variant="ghost" size="sm"><Link href="/jobs"><Search /> Browse</Link></Button>
+        <h2 className="text-xl font-semibold">我的投标</h2>
+        <Button asChild variant="ghost" size="sm"><Link href="/jobs"><Search /> 浏览</Link></Button>
       </div>
       {proposals.length === 0 ? (
-        <EmptyState text="You haven’t applied to anything yet." cta="Browse open work" href="/jobs" icon={Search} />
+        <EmptyState text="还没有投标。" cta="浏览开放需求" href="/jobs" icon={Search} />
       ) : (
         <div className="grid gap-3">
           {proposals.map((p) => (
@@ -211,10 +227,12 @@ async function FreelancerProposals({ userId }: { userId: string }) {
                   <div className="min-w-0">
                     <p className="truncate font-medium">{p.job.title}</p>
                     <p className="text-sm text-muted-foreground">
-                      Your bid: {formatMoney(p.bidAmount, 'USD')}{p.bidType === 'HOURLY' ? '/hr' : ' fixed'}
+                      报价：{formatMoney(p.bidAmount, 'CNY')}{p.bidType === 'HOURLY' ? '/小时' : ' 固定价'}
                     </p>
                   </div>
-                  <Badge variant={STATUS_VARIANT[p.status] ?? 'secondary'}>{p.status.toLowerCase()}</Badge>
+                  <Badge variant={STATUS_VARIANT[p.status] ?? 'secondary'}>
+                    {PROPOSAL_STATUS_LABEL[p.status] ?? p.status}
+                  </Badge>
                 </CardContent>
               </Card>
             </Link>
@@ -274,12 +292,12 @@ async function ProfileCompleteness({ userId }: { userId: string }) {
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2 text-base">
-          <TrendingUp className="size-4 text-primary" /> Profile strength
+          <TrendingUp className="size-4 text-primary" /> 资料完整度
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="mb-2 flex items-center justify-between text-sm">
-          <span className="text-muted-foreground">Completeness</span>
+          <span className="text-muted-foreground">完成度</span>
           <span className="font-semibold">{score}%</span>
         </div>
         <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
@@ -301,11 +319,11 @@ async function ProfileCompleteness({ userId }: { userId: string }) {
               href="/settings/profile"
               className="mt-3 inline-flex items-center gap-1 text-sm text-primary hover:underline"
             >
-              Complete your profile <ArrowRight className="size-3.5" />
+              完善资料 <ArrowRight className="size-3.5" />
             </Link>
           </>
         ) : (
-          <p className="mt-3 text-sm text-muted-foreground">Your profile looks great.</p>
+          <p className="mt-3 text-sm text-muted-foreground">资料已完善。</p>
         )}
       </CardContent>
     </Card>
@@ -339,12 +357,12 @@ async function DiscoverFreelancers() {
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2 text-base">
-          <Users2 className="size-4 text-primary" /> Recommended freelancers
+          <Users2 className="size-4 text-primary" /> 推荐服务方
         </CardTitle>
       </CardHeader>
       <CardContent>
         {freelancers.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No freelancer profiles yet.</p>
+          <p className="text-sm text-muted-foreground">还没有服务方资料。</p>
         ) : (
           <>
             <ul className="space-y-1">
@@ -392,17 +410,15 @@ async function AdminReviewCard() {
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2 text-base">
-          <ShieldCheck className="size-4 text-primary" /> Admin review
+          <ShieldCheck className="size-4 text-primary" /> 管理员审核
         </CardTitle>
       </CardHeader>
       <CardContent>
         <p className="text-sm text-muted-foreground">
-          {pending === 0
-            ? 'No accounts waiting for approval.'
-            : `${pending} account${pending === 1 ? '' : 's'} waiting for approval.`}
+          {pending === 0 ? '没有待审核账号。' : `${pending} 个账号等待审核。`}
         </p>
         <Button asChild size="sm" variant="outline" className="mt-3">
-          <Link href="/admin/approvals">Review accounts</Link>
+          <Link href="/admin/approvals">去审核</Link>
         </Button>
       </CardContent>
     </Card>
@@ -417,14 +433,14 @@ async function AccountSecurity({ userId, isFreelancer }: { userId: string; isFre
   });
 
   const rows = [
-    { label: 'Email verified', ok: !!user?.emailVerified, on: 'Verified', off: 'Not verified' },
-    { label: 'Two-factor authentication', ok: !!user?.twoFactorEnabled, on: 'On', off: 'Off' },
-    { label: 'Password', ok: !!user?.passwordHash, on: 'Set', off: 'Not set' },
+    { label: '邮箱验证', ok: !!user?.emailVerified, on: '已验证', off: '未验证' },
+    { label: '两步验证', ok: !!user?.twoFactorEnabled, on: '已开启', off: '未开启' },
+    { label: '密码', ok: !!user?.passwordHash, on: '已设置', off: '未设置' },
     {
-      label: isFreelancer ? 'Payout method' : 'Payment method',
+      label: isFreelancer ? '收款方式' : '付款方式',
       ok: !!user?.payoutProvider,
-      on: 'Set up',
-      off: 'Not set up',
+      on: '已设置',
+      off: '未设置',
     },
   ];
 
@@ -432,7 +448,7 @@ async function AccountSecurity({ userId, isFreelancer }: { userId: string; isFre
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2 text-base">
-          <ShieldCheck className="size-4 text-primary" /> Account &amp; security
+          <ShieldCheck className="size-4 text-primary" /> 账号与安全
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -451,7 +467,7 @@ async function AccountSecurity({ userId, isFreelancer }: { userId: string; isFre
           ))}
         </ul>
         <Button asChild size="sm" variant="outline" className="mt-3">
-          <Link href="/settings">Manage account</Link>
+          <Link href="/settings">管理账号</Link>
         </Button>
       </CardContent>
     </Card>
@@ -463,19 +479,19 @@ function GetPaidCard({ isFreelancer, money }: { isFreelancer: boolean; money: nu
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2 text-base">
-          <Wallet className="size-4 text-primary" /> {isFreelancer ? 'Get paid' : 'Payments'}
+          <Wallet className="size-4 text-primary" /> {isFreelancer ? '收款' : '付款'}
         </CardTitle>
       </CardHeader>
       <CardContent>
         <p className="text-sm text-muted-foreground">
           {money > 0
-            ? `${formatMoney(money, 'USD')} ${isFreelancer ? 'earned' : 'paid'} — 0% platform fee.`
+            ? `${formatMoney(money, 'CNY')} ${isFreelancer ? '已收入' : '已支出'} — 平台 0 抽佣。`
             : isFreelancer
-              ? 'Set up a payout method so clients can pay you directly.'
-              : 'Choose how you pay talent — directly, zero fees.'}
+              ? '绑定收款方式，客户结算后直接到账。'
+              : '选择付款方式，直接付给服务方，平台不抽佣。'}
         </p>
         <Button asChild size="sm" variant="outline" className="mt-3">
-          <Link href="/settings/payments">{isFreelancer ? 'Set up payouts' : 'Payment settings'}</Link>
+          <Link href="/settings/payments">{isFreelancer ? '设置收款' : '付款设置'}</Link>
         </Button>
       </CardContent>
     </Card>
@@ -493,12 +509,12 @@ async function RecentActivity({ userId }: { userId: string }) {
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2 text-base">
-          <Activity className="size-4 text-primary" /> Recent activity
+          <Activity className="size-4 text-primary" /> 最近动态
         </CardTitle>
       </CardHeader>
       <CardContent>
         {items.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Nothing yet — activity shows up here.</p>
+          <p className="text-sm text-muted-foreground">暂无动态。</p>
         ) : (
           <ul className="space-y-3">
             {items.map((n) => {
@@ -507,7 +523,7 @@ async function RecentActivity({ userId }: { userId: string }) {
                   <p className="text-sm font-medium leading-snug">{n.title}</p>
                   {n.body ? <p className="truncate text-xs text-muted-foreground">{n.body}</p> : null}
                   <p className="text-xs text-muted-foreground">
-                    {n.createdAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    {n.createdAt.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })}
                   </p>
                 </>
               );

@@ -20,6 +20,8 @@ export type AdminUser = {
   role: string;
   status: string;
   approved: boolean;
+  realName: string;
+  identityStatus: string;
   companyName: string;
   headline: string;
   contactEmail: string;
@@ -88,7 +90,13 @@ export function UserRow({ user }: { user: AdminUser }) {
                   unapproved
                 </Badge>
               ) : null}
+              <Badge variant={user.identityStatus === 'VERIFIED' ? 'secondary' : 'outline'}>
+                实名：{user.identityStatus === 'VERIFIED' ? '已认证' : user.identityStatus === 'PENDING' ? '待审核' : '未认证'}
+              </Badge>
             </div>
+            {user.realName ? (
+              <p className="mt-1 text-sm text-muted-foreground">真实姓名：{user.realName}</p>
+            ) : null}
             <p className="mt-1 truncate font-medium">{user.name || '— no name —'}</p>
             <p className="truncate text-sm text-muted-foreground">
               {user.email}
@@ -103,6 +111,16 @@ export function UserRow({ user }: { user: AdminUser }) {
             {!user.approved ? (
               <Button size="sm" disabled={busy} onClick={() => patch({ approved: true })}>
                 Approve
+              </Button>
+            ) : null}
+            {user.identityStatus === 'PENDING' ? (
+              <Button size="sm" variant="outline" disabled={busy} onClick={() => patch({ identityVerified: true })}>
+                通过实名
+              </Button>
+            ) : null}
+            {user.identityStatus === 'VERIFIED' ? (
+              <Button size="sm" variant="ghost" disabled={busy} onClick={() => patch({ identityVerified: false })}>
+                撤销实名
               </Button>
             ) : null}
             <Button size="sm" variant="ghost" onClick={() => setOpen(!open)}>

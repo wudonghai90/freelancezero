@@ -17,12 +17,12 @@ export function POST(req: Request) {
     if (existing) {
       // Do not reveal whether the email exists to unauthenticated callers in
       // production; here we return a generic conflict.
-      return fail('An account with that email already exists', 409);
+      return fail('该邮箱已注册', 409);
     }
 
     const passwordHash = await bcrypt.hash(body.password, 12);
 
-    const name = `${body.firstName} ${body.lastName}`;
+    const name = `${body.lastName}${body.firstName}`;
     const user = await db.user.create({
       data: {
         name,

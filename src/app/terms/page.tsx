@@ -5,7 +5,7 @@ import { pageMetadata } from '@/lib/seo';
 export const metadata = pageMetadata({
   title: 'Terms of Service',
   description:
-    'The terms that govern your use of Freelancezero — the zero-fee freelance marketplace. Plain language, no hidden commissions.',
+    'The terms that govern your use of 自由工作平台 — the zero-fee freelance marketplace. Plain language, no hidden commissions.',
   path: '/terms',
   keywords: ['freelancezero terms of service', 'freelance marketplace terms'],
 });
@@ -14,26 +14,26 @@ export default function TermsPage() {
   return (
     <LegalPage
       title="Terms of Service"
-      intro="The rules for using Freelancezero. We have tried to keep them short and readable, because terms nobody reads protect nobody."
+      intro="The rules for using 自由工作平台. We have tried to keep them short and readable, because terms nobody reads protect nobody."
       updated="August 2, 2026"
     >
       <Section heading="1. Agreement">
         <p>
-          By creating an account or using Freelancezero you agree to these Terms. If you are using
+          By creating an account or using 自由工作平台 you agree to these Terms. If you are using
           the platform on behalf of a company, you confirm you are authorised to bind that company.
           If you do not agree, do not use the service.
         </p>
       </Section>
 
-      <Section heading="2. What Freelancezero is — and is not">
+      <Section heading="2. What 自由工作平台 is — and is not">
         <p>
-          Freelancezero is a venue that connects clients and freelancers. We charge{' '}
+          自由工作平台 is a venue that connects clients and freelancers. We charge{' '}
           <strong>no commission on your work</strong>. We are <strong>not</strong> a party to any
           contract you form with another user, we are not an employer or employment agency, and we
           do not supervise or guarantee any work performed.
         </p>
         <p>
-          Freelancezero is non-custodial: we never hold your money. Payments are arranged directly
+          自由工作平台 is non-custodial: we never hold your money. Payments are arranged directly
           between client and freelancer using the method they choose.
         </p>
       </Section>
@@ -76,7 +76,7 @@ export default function TermsPage() {
 
       <Section heading="6. Payments, taxes, and fees">
         <p>
-          Freelancezero takes 0% of what you earn. Third-party payment providers you choose (for
+          自由工作平台 takes 0% of what you earn. Third-party payment providers you choose (for
           example Stripe, PayPal, or Wise) may charge their own processing fees, which are outside
           our control. You are solely responsible for determining, reporting, and paying your own
           taxes.
@@ -102,7 +102,7 @@ export default function TermsPage() {
 
       <Section heading="9. Limitation of liability">
         <p>
-          To the maximum extent permitted by law, Freelancezero is not liable for indirect,
+          To the maximum extent permitted by law, 自由工作平台 is not liable for indirect,
           incidental, special, consequential, or punitive damages, or for lost profits, revenue,
           data, or goodwill. Because we charge you nothing, our aggregate liability to you is limited
           to the greater of amounts you paid us in the prior twelve months (typically zero) or USD
@@ -120,7 +120,7 @@ export default function TermsPage() {
 
       <Section heading="11. Open source">
         <p>
-          The Freelancezero software is released under the MIT licence. These Terms govern the
+          The 自由工作平台 software is released under the MIT licence. These Terms govern the
           hosted service at freelancezero.com; the software licence governs the code. Self-hosted
           instances are operated by whoever runs them, and we are not responsible for them.
         </p>

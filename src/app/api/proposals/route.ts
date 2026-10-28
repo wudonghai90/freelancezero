@@ -22,8 +22,8 @@ export function POST(req: Request) {
       where: { id: session.user.id },
       select: { emailVerified: true, approvedAt: true },
     });
-    if (!me?.emailVerified) return forbidden('Confirm your email before applying — check your inbox.');
-    if (!me.approvedAt) return forbidden('Your account is pending admin review. You can apply once approved.');
+    if (!me?.emailVerified) return forbidden('请先验证邮箱后再投标（请查看收件箱）');
+    if (!me.approvedAt) return forbidden('账号正在等待管理员审核，通过后即可投标');
 
     const body = createProposalSchema.parse(await req.json());
 
@@ -31,13 +31,13 @@ export function POST(req: Request) {
       where: { id: body.jobId },
       select: { id: true, slug: true, status: true, clientId: true, title: true },
     });
-    if (!job || job.status !== 'OPEN') return fail('This job is not accepting proposals', 409);
-    if (job.clientId === session.user.id) return fail('You cannot bid on your own job', 400);
+    if (!job || job.status !== 'OPEN') return fail('该需求已停止接收投标', 409);
+    if (job.clientId === session.user.id) return fail('不能对自己的需求投标', 400);
 
     const duplicate = await db.proposal.findUnique({
       where: { jobId_freelancerId: { jobId: job.id, freelancerId: session.user.id } },
     });
-    if (duplicate) return fail('You already submitted a proposal for this job', 409);
+    if (duplicate) return fail('你已提交过该需求的投标', 409);
 
     const qualityScore = await computeQualityScore(session.user.id, body.coverLetter);
 

@@ -53,10 +53,13 @@ async function main() {
   // An admin (reviews new accounts in the approval queue)
   await db.user.upsert({
     where: { email: 'admin@example.com' },
-    update: {},
+    update: { realName: '管理员', identityStatus: 'VERIFIED', identityProvider: 'manual' },
     create: {
       email: 'admin@example.com',
-      name: 'Site Admin',
+      name: '管理员',
+      realName: '管理员',
+      identityStatus: 'VERIFIED',
+      identityProvider: 'manual',
       passwordHash: password,
       role: 'ADMIN',
       emailVerified: new Date(),
@@ -67,33 +70,39 @@ async function main() {
   // A client
   const client = await db.user.upsert({
     where: { email: 'client@example.com' },
-    update: {},
+    update: { realName: '张伟', identityStatus: 'VERIFIED', identityProvider: 'manual' },
     create: {
       email: 'client@example.com',
-      name: 'Acme Startup',
+      name: '张伟',
+      realName: '张伟',
+      identityStatus: 'VERIFIED',
+      identityProvider: 'manual',
       passwordHash: password,
       role: 'CLIENT',
       emailVerified: new Date(),
       approvedAt: new Date(),
-      clientProfile: { create: { companyName: 'Acme Inc.', paymentVerified: true, emailVerified: true } },
+      clientProfile: { create: { companyName: '星澜科技', paymentVerified: true, emailVerified: true } },
     },
   });
 
   // A freelancer
   const freelancer = await db.user.upsert({
     where: { email: 'freelancer@example.com' },
-    update: {},
+    update: { realName: '李然', identityStatus: 'VERIFIED', identityProvider: 'manual' },
     create: {
       email: 'freelancer@example.com',
-      name: 'Jordan Dev',
+      name: '李然',
+      realName: '李然',
+      identityStatus: 'VERIFIED',
+      identityProvider: 'manual',
       passwordHash: password,
       role: 'FREELANCER',
       emailVerified: new Date(),
       approvedAt: new Date(),
       freelancerProfile: {
         create: {
-          headline: 'Senior Full-Stack Engineer',
-          bio: 'I build fast, accessible web apps with React, Next.js and TypeScript.',
+          headline: '资深全栈工程师',
+          bio: '使用 React、Next.js 与 TypeScript 构建快速、可访问的 Web 应用。',
           hourlyRate: 8500,
           availability: 'OPEN_TO_WORK',
           completenessScore: 85,
@@ -115,16 +124,20 @@ async function main() {
   // A job
   await db.job.upsert({
     where: { slug: 'build-a-marketing-site-demo' },
-    update: {},
+    update: {
+      title: '用 Next.js 搭建营销官网',
+      budgetMin: 2500000,
+      budgetMax: 2500000,
+    },
     create: {
       slug: 'build-a-marketing-site-demo',
       clientId: client.id,
-      title: 'Build a marketing site in Next.js',
+      title: '用 Next.js 搭建营销官网',
       description:
-        'We need a fast, SEO-friendly marketing site with a blog and dark mode. Design in Figma provided. ~2 weeks.',
+        '需要一个快速、利于 SEO 的营销官网，包含博客与深色模式。Figma 设计稿已备好，预计约 2 周完成。',
       budgetType: 'FIXED',
-      budgetMin: 250000,
-      budgetMax: 250000,
+      budgetMin: 2500000,
+      budgetMax: 2500000,
       experience: 'EXPERT',
       estimatedDays: 14,
       status: 'OPEN',

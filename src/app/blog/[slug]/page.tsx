@@ -94,7 +94,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </CardHeader>
         <CardContent className="flex flex-wrap items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            Freelancezero charges 0% commission — no fees to apply, no cut of your invoice.
+            自由工作平台 charges 0% commission — no fees to apply, no cut of your invoice.
           </p>
           <Button asChild>
             <Link href="/register">

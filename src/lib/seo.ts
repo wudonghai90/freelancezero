@@ -10,12 +10,12 @@ import type { Metadata } from 'next';
  *   "freelance marketplace no commission", "no fee freelance website".
  */
 export const SITE = {
-  name: 'Freelancezero',
+  name: '自由工作平台',
   url: process.env.NEXT_PUBLIC_APP_URL ?? 'https://freelancezero.com',
   // Title-tag positioning line — keyword-first, benefit-second.
   tagline: 'The Zero-Fee Upwork Alternative',
   description:
-    'Freelancezero is the zero-fee alternative to Upwork. Freelancers keep 100% of what they earn — no commissions, no connects. Clients hire top talent faster and pay directly. Free forever.',
+    '自由工作平台 is the zero-fee alternative to Upwork. Freelancers keep 100% of what they earn — no commissions, no connects. Clients hire top talent faster and pay directly. Free forever.',
   twitter: '@freelancezero',
   keywords: [
     'Upwork alternative',
